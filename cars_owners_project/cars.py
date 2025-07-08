@@ -1,10 +1,14 @@
 import sqlite3
 import csv
+import os
 
-conn=sqlite3.connect('cars.db')
-conn.execute("DROP TABLE IF EXISTS owners;")
-conn.execute("DROP TABLE IF EXISTS cars;")
-conn.commit()
+# Set folder path
+base_path = os.path.dirname(__file__)
+csv_file = os.path.join(base_path, 'cars.csv')
+updated_csv_file = os.path.join(base_path, 'owners.csv')
+database_path=os.path.join(base_path, 'car_owners.db')
+conn=sqlite3.connect(database_path)
+
 # create a table, car
 
 qry_create_table="""CREATE table if not exists cars (
@@ -62,7 +66,7 @@ for each_row in data:
     print(each_row)
 
 #creating owner table
-qry_create_owners="""CREATE table if not exists owners (
+qry_create_owners="""CREATE table if not exists owners(
     owner_name text,
     owner_id int,
     owner_car_id text, foreign key(owner_car_id) references cars(carid)
@@ -94,7 +98,7 @@ qry_select_all_owners="""select * from owners"""
 conn.commit()
 
 
-def fun_car(query,data=None,db='cars.db'):#The SQL query to run,--data is type, list or single data,--db is our db
+def fun_car(query,data=None,db=database_path):#The SQL query to run,--data is type, list or single data,--db is our db
     conn=sqlite3.connect(db)
     cursor=conn.cursor()# Creates a cursor object to execute SQL commands.
     try:
@@ -117,7 +121,7 @@ def fun_car(query,data=None,db='cars.db'):#The SQL query to run,--data is type, 
         return f"an error occured: {e}"
 
 
-def fun_owners(query,data=None,db='cars.db'):#The SQL query to run,--data is type, list or single data,--db is our db
+def fun_owners(query,data=None,db=database_path):#The SQL query to run,--data is type, list or single data,--db is our db
     conn=sqlite3.connect(db)
     cursor=conn.cursor()# Creates a cursor object to execute SQL commands.
     try:
@@ -151,16 +155,16 @@ for r in result1:
     print(r)
 
 ## Export to CSV
-with open('car.csv', 'w') as file:
+with open(csv_file, 'w') as file:
     writer=csv.writer(file)
     writer.writerow(['carid', 'carmake', 'carmodel', 'caryear'])  # Column names
     writer.writerows(result)
-    print("Data exported to car.csv successfully ...")
+    print("Data exported to cars.csv successfully ...")
 
 
-with open('owners.csv','w') as file1:
+with open(updated_csv_file,'w') as file1:
     writer=csv.writer(file1)
-    writer.writerows(['owner_name','owner_id','owner_car_id'])
+    writer.writerow(['owner_name','owner_id','owner_car_id'])
     writer.writerows(result1)
     print("Data exported to owners.csv successfully ...")
 

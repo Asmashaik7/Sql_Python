@@ -4,9 +4,10 @@
 #Then reads the file and:
 #1. Prints names of students who scored more than 80
 #2. Calculates average marks of the class
-#3. Saves those with less than 35 as "FAIL" in a new column
+#3. Saves those with less than 35 as "FAIL" in a new columnhema
 
 import csv
+import os
 
 #collect input of 5 students , use for loop and append in student list
 student1=[] 
@@ -17,7 +18,11 @@ for each in range(5):
     student1.append([name, marks])#this is value, so no quotes, variables.
 
 # Step 2: Save to CSV3
-with open('marks.csv','w',newline='') as file:
+base_path = os.path.dirname(__file__) #base path: to save all files in a single folder, but not at default places
+csv_file = os.path.join(base_path, 'd3_marks.csv')
+updated_csv_file = os.path.join(base_path, 'd3_marks_status.csv')
+
+with open(csv_file,'w',newline='') as file:
     writer=csv.writer(file)
     writer.writerow(['name','marks']) #this is a header, so quotes
     writer.writerows(student1)
@@ -31,7 +36,7 @@ print("\n✅ Data saved to marks.csv")
 update_stud=[]
 total=0
 
-with open('marks.csv','r') as file:
+with open(csv_file,'r') as file:
     reader=csv.reader(file)
     next(reader) # skip header-Because when you read a CSV file using csv.reader(), it includes everything, including the header.
 #So if you don’t skip it, your loop will treat 'Name' and 'Marks' as data — and cause errors.
@@ -56,11 +61,12 @@ print("avg marks of the class:",avg)
 
 # Step 2: Save the updated csv to CSV3
 # 3. Save updated CSV with status column
-with open('marks.csv', 'w', newline='') as file:
+
+with open(updated_csv_file, 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(['name', 'marks', 'status'])
     writer.writerows(update_stud)
 
-print("✅ Updated CSV with FAIL status saved to marks.csv")
+print("✅ Updated CSV with FAIL status saved to d3_marks_status.csv")
 
         

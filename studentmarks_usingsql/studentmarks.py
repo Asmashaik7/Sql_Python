@@ -1,12 +1,9 @@
 #Day3-assignment
-#Takes input of 5 students with their name and marks.
+#Takes input of  students with their name and marks.
 #Stores data into a CSV file grades.csv
-#Then reads the file and:
-#1. Prints names of students who scored more than 80
-#2. Calculates average marks of the class
-#3. Saves those with less than 35 as "FAIL" in a new column
 
 
+#using sql
 import sqlite3
 import csv
 import os
