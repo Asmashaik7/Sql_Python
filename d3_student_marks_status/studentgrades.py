@@ -15,7 +15,7 @@ student1=[]
 for each in range(5):
     name=input(f"Enter name of student{each+1}: ") # as list starts from 0, but names list should start with 1 na.
     marks=int(input("Enter marks: "))
-    student1.append([name, marks])#this is value, so no quotes, variables.
+    student1.append([name, marks])#this is value, so no quotes, its a variables.
 
 # Step 2: Save to CSV3
 base_path = os.path.dirname(__file__) #base path: to save all files in a single folder, but not at default places

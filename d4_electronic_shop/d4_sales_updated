@@ -1,0 +1,7 @@
+product,units_sold,price_per_unit,status
+Mobile,10,20000,High
+Laptops,7,100000,High
+Tablets,12,4000,Normal
+Ear phones,40,1200,Normal
+Ear pods,25,2000,High
+Pen drive,20,500,Normal
