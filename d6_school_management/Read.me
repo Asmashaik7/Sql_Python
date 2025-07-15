@@ -1,0 +1,60 @@
+💼 Project: Student Marks Management System
+📋 Table Name:
+d6_students_table
+📑 Columns:
+Column	Type
+student_id	INTEGER (Primary Key)
+name	TEXT
+math_marks	INTEGER
+english_marks	INTEGER
+science_marks	INTEGER
+
+🧠 Tasks You Need to Do:
+✅ 1. Take input for 3 students using a loop
+student ID
+
+name
+
+marks for Math, English, and Science
+
+Store as a list of dictionaries → convert to tuples → insert using executemany()
+
+✅ 2. Create the table d6_students_table
+Use IF NOT EXISTS and correct data types.
+
+✅ 3. View all student records
+Use SELECT * FROM d6_students_table
+
+✅ 4. View students who scored above 90 in any subject
+SQL:
+
+sql
+Copy
+Edit
+SELECT * FROM d6_students_table
+WHERE math_marks > 90 OR english_marks > 90 OR science_marks > 90;
+✅ 5. Update a student's marks by their ID
+Ask user for student ID → update all 3 subjects.
+
+✅ 6. Show class average for each subject
+SQL:
+
+sql
+Copy
+Edit
+SELECT AVG(math_marks), AVG(english_marks), AVG(science_marks) FROM d6_students_table;
+✅ 7. Show topper in each subject
+Use:
+
+sql
+Copy
+Edit
+SELECT name, math_marks FROM d6_students_table ORDER BY math_marks DESC LIMIT 1;
+💾 File Name Suggestion:
+d6_students_marks.py
+
+🏁 Bonus (Optional):
+Show total marks and sort by highest
+
+Search student by name (case-insensitive)
+

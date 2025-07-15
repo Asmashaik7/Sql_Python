@@ -12,7 +12,7 @@ database_path=os.path.join(base_path, 'd5_library.db')
 conn=sqlite3.connect(database_path)
 #conn.row_factory = sqlite3.Row# to use row names, instead of indexes like row[1]
 
-books=[]#List of directories
+books=[]#List of dictionaries
 for each in range(3):
   book_id=int(input(f"Enter the book_id{each+1}: "))
   title=input(f"Enter title of the book{each+1}: ")
