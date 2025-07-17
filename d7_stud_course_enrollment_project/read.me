@@ -1,0 +1,57 @@
+ Project: Student Course Enrollment System
+This project will give you hands-on experience working with multiple related tables, JOINs, and managing many-to-many relationships using Python + SQLite.
+
+📦 1. Tables to Create:
+a. students
+
+CREATE TABLE IF NOT EXISTS students (
+    student_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL
+);
+b. courses
+
+CREATE TABLE IF NOT EXISTS courses (
+    course_id INTEGER PRIMARY KEY,
+    course_name TEXT NOT NULL,
+    instructor TEXT NOT NULL
+);
+c. enrollments
+
+CREATE TABLE IF NOT EXISTS enrollments (
+    enrollment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER,
+    course_id INTEGER,
+    enrollment_date TEXT,
+    FOREIGN KEY(student_id) REFERENCES students(student_id),
+    FOREIGN KEY(course_id) REFERENCES courses(course_id)
+);
+🧠 2. Python + SQL Tasks to Do:
+Task	Description
+1. Add students	Add 3 students with student_id, name, email.
+2. Add courses	Add 3 courses with course_id, course_name, instructor.
+3. Enroll students	Enroll each student in at least 1 course (with today’s date).
+4. View enrollments	Show student name, course name, instructor, and date using JOIN.
+5. Search by student name	Case-insensitive search, display enrolled courses.
+6. Update student email	Update email based on student_id.
+7. Delete student	Remove student and their enrollments.
+8. BONUS	Show course-wise student count (using GROUP BY).
+
+🛠 Bonus Queries Example:
+sql
+-- Show how many students are enrolled in each course
+SELECT c.course_name, COUNT(e.student_id) as total_students
+FROM enrollments e
+JOIN courses c ON e.course_id = c.course_id
+GROUP BY e.course_id;
+📂 Output Suggestion
+
+
+📘 Student Course Enrollment System
+------------------------------------
+1. View All Enrollments
+2. Search Enrollments by Student Name
+3. Update Student Email
+4. Delete Student Record
+5. Show Course-wise Enrollment Count
+0. Exit
