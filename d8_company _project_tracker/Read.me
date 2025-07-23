@@ -1,0 +1,69 @@
+💼 Project Title: Company Project Tracker
+📚 Scenario:
+You are building a small system to track which employees are working on which projects in a company.
+
+📂 Tables to Create:
+1. employees
+Column Name	Type
+emp_id	INTEGER PRIMARY KEY
+name	TEXT
+department	TEXT
+
+2. projects
+Column Name	Type
+project_id	INTEGER PRIMARY KEY
+project_name	TEXT
+budget	INTEGER
+
+3. employee_projects
+Column Name	Type
+emp_id	INTEGER (FK)
+project_id	INTEGER (FK)
+hours_allocated	INTEGER
+
+✅ Assignment Tasks:
+Step 1: Table Creation
+Create all three tables.
+
+Use foreign keys appropriately in employee_projects.
+
+Step 2: Insert Data
+Add 5 employees, 3 projects, and map them using employee_projects (min 2 projects per employee, multiple employees per project allowed).
+
+Step 3: Python Menu System
+Implement a CLI menu with the following options:
+
+pgsql
+Copy
+Edit
+1. Show all employees
+2. Show all projects
+3. Show all employee-project assignments
+4. Search projects by employee name
+5. Add new employee
+6. Assign employee to a project
+7. Exit
+💡 Hints for Implementation:
+For Option 3, use JOIN across the three tables.
+
+For Option 4, take employee name input and display their project names and hours.
+
+For Option 6, let user pick emp_id, project_id, and hours_allocated.
+
+🏁 Bonus Tasks (Optional):
+Department-wise Project Hours Summary
+Show total hours_allocated for each department using JOIN + GROUP BY.
+
+Top Project by Budget
+Show project with highest budget.
+
+Employee with Most Hours Assigned
+Show employee name and total hours.
+
+✅ Submission Criteria:
+All SQL code should be in your Python script using sqlite3.
+
+Modularize code (functions for each menu option).
+
+Use clear input/output formatting.
+
