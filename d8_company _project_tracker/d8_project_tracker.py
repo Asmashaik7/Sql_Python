@@ -228,7 +228,7 @@ while True:
         print("Exiting..")
         break
     else:
-        print("Not a valid choice..")
+        print("Not a valid choice.")
 
 
 
