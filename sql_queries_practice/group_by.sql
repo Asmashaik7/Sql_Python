@@ -3,6 +3,10 @@
 
 -- SUM(), AVG(), COUNT(), MAX(), MIN()
 
+ WHEN do you use GROUP BY?
+👉 Rule:
+--If you're using an aggregate function (like SUM, COUNT, AVG, MAX, MIN) and you want the result per group, you MUST use GROUP BY.
+
 🧾 Table: sales
 product	category	quantity	price
 Laptop	Electronics	2	50000
