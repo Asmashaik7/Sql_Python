@@ -7,6 +7,34 @@
 👉 Rule:
 --If you're using an aggregate function (like SUM, COUNT, AVG, MAX, MIN) and you want the result per group, you MUST use GROUP BY.
 
+💡 Quick Tip:
+Only use parentheses in IN (), VALUES (), or subqueries — not in GROUP BY.
+
+SELECT department, location, COUNT(*) AS emp_count
+FROM employees
+WHERE salary > 90000
+GROUP BY department, location
+HAVING COUNT(*) >= 2;
+
+GROUP BY department, location
+This tells SQL:
+
+“Group the data separately for each unique combination of department and location.”
+
+🔎 Visual:
+department	location	emp_name
+IT	Chennai	A
+IT	Chennai	B
+IT	Mumbai	C
+
+If you do GROUP BY department, location:
+
+One group is: IT + Chennai
+
+Another group is: IT + Mumbai
+
+===========================
+
 🧾 Table: sales
 product	category	quantity	price
 Laptop	Electronics	2	50000
@@ -63,3 +91,4 @@ GROUP BY customer_name;
 -- 5	Anjali	Eraser	2
 -- 6	Anjali	Pencil	1
 -- 7	Mohan	Notebook	4
+--------------------

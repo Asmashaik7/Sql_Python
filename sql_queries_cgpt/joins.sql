@@ -1,0 +1,2 @@
+--  What Are JOINS?
+-- JOINS combine rows from two or more tables based on a related column.

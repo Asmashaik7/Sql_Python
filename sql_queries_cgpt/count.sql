@@ -51,4 +51,39 @@ select location,count(*) as emp_count from employees where salary>70000 group by
 select location,count(*) as emp_count from employees where salary>70000 group by location having count(*)>=2;
 
 -- --Q3: Departments with at least 2 employees earning less than 60,000?
-select 
+select department,count(*) as emp_count from employees where salary<60000 group by department count(*)<=2;
+
+--Q4: Show each location and number of employees, but only if the location has 3 or more different departments.
+SELECT location, COUNT(DISTINCT name) AS emp_count
+FROM employees
+GROUP BY location
+HAVING COUNT(DISTINCT department) >= 3;
+
+ --Or if you want both: number of employees and number of departments:
+ SELECT location,
+       COUNT(DISTINCT name) AS emp_count,
+       COUNT(DISTINCT department) AS dept_count
+FROM employees
+GROUP BY location
+HAVING COUNT(DISTINCT department) >= 3;
+
+--💼 SQL Challenge – Count + Group By + Having
+
+📌 Task:
+--"Show each location and number of employees earning less than ₹70,000. Only include locations with more than 3 such employees."
+select location,count(distinct name) as emp_count from employees where salary>70000 group by location having count(distinct name)>3;
+
+-- 🔥 SQL Challenge 2 – COUNT + GROUP BY + WHERE + HAVING
+📌 Task:
+-- Show each department that has 2 or more employees earning more than ₹90,000.
+select department,count(*) as emp_count from employees where salary>90000 group by department having count(*)>=2;
+
+🔄 SQL Twist Challenge
+📌 Task:
+
+--Show each department and location combination that has at least 2 employees earning more than ₹90,000.
+
+select department,location, count(*) from employees where salary >90000 group by department,location having count(*)>=2;
+
+-- 💡 Quick Tip:
+-- Only use parentheses in IN (), VALUES (), or subqueries — not in GROUP BY.
