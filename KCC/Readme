@@ -1,0 +1,32 @@
+KCC Database – SQL Learning Project
+
+This repository contains my SQL practice files based on the KCC sample database.
+The database is designed for learning SQL concepts, focusing on data reporting and analysis.
+
+📌 Database Design
+
+The KCC database consists of 4 main tables:
+
+Customers → Stores customer details.
+
+Orders → Tracks customer orders.
+
+Order_Products → Links orders with products.
+
+Products → Stores product information.
+
+The tables are connected using primary keys and foreign keys to form a relational database.
+
+📖 SQL Concepts Practiced
+
+Explored the Customers table.
+
+Practiced joins between Customers and Orders to analyze order details.
+
+Worked on filtering data using WHERE, OR, BETWEEN, AND, DISTINCT, IN, NOT IN, GROUP BY, ORDER BY.
+
+Worked on functions- SUM(), DATEADD(), GETDATE(), COUNT()
+
+Learned about relationships between tables and how to retrieve meaningful insights.
+
+Query Designer for visual joins and filtering
