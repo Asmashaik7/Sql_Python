@@ -1,7 +1,6 @@
 -- 💼 Interview Q1.
 -- From the employees table, list each department and the number of employees working in it.
 -- Only include departments where the number of employees is between 3 and 5.
-
 -- Expected Columns:
 -- department
 -- emp_count
@@ -10,7 +9,6 @@ select department, count(name) as emp_count from employees group by department h
 
 -- 🏢 Interview Q2.
 -- In the employees table, show each location and the average salary, but only for locations where the average salary is above 60,000.
-
 -- Expected Columns:
 -- location
 -- avg_salary
@@ -41,9 +39,6 @@ HAVING COUNT(*) >= 2;
 
 -- It literally means:
 -- ➤ "Count how many rows exist in that group."
-
--- You're saying:
-
 -- “Group all employees by department, and only keep those departments that have 2 or more employees.”
 
 -- 🔁 How to think of * in COUNT(*) logically:
