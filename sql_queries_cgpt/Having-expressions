@@ -1,1 +1,63 @@
+--🔹 Practice Queries Using Expressions in HAVING
+--Assume table employees(emp_id, emp_name, department, salary, location)
+
+--1. List departments where average salary minus minimum salary > 20000
+select department, avg(salary) as avg_sal,min(salary) as min_sal from employees
+group by department
+having avg(salary)-min(salary)>20000;
+
+--2. Show departments where total salary / number of employees > 60000
+select department, sum(salary) as total_sal, count(*) as emp_count from employees
+group by department
+having sum(salary)/count(*)>60000;
+
+--3. Departments where number of employees squared > 16 (just for practice)
+select department, count(*) from employee 
+group by department
+having power(count(*), 2)>16;
+
+--4. Locations where max salary - min salary > 40000
+SELECT location, MAX(salary) AS max_sal, MIN(salary) AS min_sal
+FROM employees
+GROUP BY location
+HAVING MAX(salary) - MIN(salary) > 40000;
+
+--5. Departments where SUM(salary) - AVG(salary) > 100000
+SELECT department, SUM(salary) AS total_sal, AVG(salary) AS avg_sal
+FROM employees
+GROUP BY department
+HAVING SUM(salary) - AVG(salary) > 100000;
+
+--6. Departments where MAX(salary)/MIN(salary) > 2
+select department,max(salary) as Max_sal, min(salary) as min_sal
+from employees
+group by department
+having max(salary)/min(salary)>2;
+
+--7. Departments with more than 2 employees and less than 5 employees
+select department,count(*) as emp_count from employees
+group by department
+having count(*)>2 and count(*)<5;
+
+--8. Locations where average salary per employee > 50000
+select location, avg(salary)
+from employees
+group by location
+having avg(salary) > 50000;
+
+--9. Departments where (MAX(salary) + MIN(salary))/2 > 60000
+select department, max(sal), min(sal) from employees
+group by department
+having (max(salary)+min(salary))/2>60000;
+
+--10. Departments where number of employees × average salary > 300000
+select department, avg(salary), count(*) as emp_count from employees
+group by department
+having count(*)*avg(salary)>300000;
+
+
+
+
+
+
 
