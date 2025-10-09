@@ -18,7 +18,6 @@ HAVING avg_salary > 60000
 ORDER BY avg_salary DESC;
 
 -- Filters employees only from Mumbai
---
 --Groups them by department
 -- Calculates average salary for each department
 -- Keeps only those where average salary > 60000
