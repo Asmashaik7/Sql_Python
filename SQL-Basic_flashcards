@@ -2,30 +2,43 @@
 
 These are my SQL flashcards created using Claude Artifacts.
 
-🔗 **View online**: [Flashcards](https://claude.ai/public/artifacts/d0e2abf0-0e1b-4a8b-bb9e-cc971ec86782)
+🔗 **View online:** [Flashcards](https://claude.ai/public/artifacts/d0e2abf0-0e1b-4a8b-bb9e-cc971ec86782)
 
-I've created an interactive SQL flashcards app for you! Here's what it includes:
-**Features:**
+---
 
-*20 essential SQL query cards covering basic operations*
-Click the card to flip between question and answer
-Navigation buttons to move forward/backward
-Reset button to start over
-Progress tracker showing which card you're on
+## 🎯 Overview
+I've created an interactive SQL flashcards app designed to make learning SQL fun and efficient.
 
-What's Covered:
+---
 
-SELECT statements (all columns, specific columns)
-WHERE clause and filtering
-ORDER BY (sorting)
-LIMIT
-Aggregate functions (COUNT, SUM, AVG, MAX, MIN)
-DISTINCT for unique values
-AND/OR conditions
-BETWEEN, LIKE patterns
-NULL handling
-GROUP BY and HAVING
+## ✨ Features
+- **20 essential SQL query cards** covering basic operations  
+- **Click to flip** each card between question and answer  
+- **Navigation buttons** to move forward or backward  
+- **Reset button** to start over anytime  
+- **Progress tracker** showing your current card number  
 
-More info:
-- Created: <date>
-- Topics covered: SELECT, JOIN, GROUP BY, etc.
+---
+
+## 📚 Topics Covered
+- `SELECT` statements (all columns, specific columns)  
+- `WHERE` clause and filtering  
+- `ORDER BY` (sorting)  
+- `LIMIT`  
+- Aggregate functions: `COUNT`, `SUM`, `AVG`, `MAX`, `MIN`  
+- `DISTINCT` for unique values  
+- Logical operators: `AND`, `OR`  
+- Pattern matching: `BETWEEN`, `LIKE`  
+- Handling `NULL` values  
+- `GROUP BY` and `HAVING` clauses  
+
+---
+
+## 🗓️ More Info
+- **Created:** *(13-10-2025)*  
+- **Built using:** Claude Artifacts  
+- **Purpose:** To practice and memorize core SQL concepts interactively  
+
+---
+
+💡 *This project demonstrates my ability to use AI tools creatively for structured, self-paced learning in data analytics.*
