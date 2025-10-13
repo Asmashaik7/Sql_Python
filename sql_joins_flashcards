@@ -1,0 +1,18 @@
+I've created a comprehensive SQL JOINS flashcard app with simple examples using Claude artifacts. 
+Here's what's included:
+https://claude.ai/public/artifacts/0bafb1f2-2e97-4f3b-b841-7856023250ec
+Core JOIN types: INNER, LEFT, RIGHT, FULL OUTER
+Visual explanations: Each card has a simple "key takeaway"
+Practical examples: Simple tables (Customers/Orders, Students/Courses)
+Real-world scenarios: When to use each JOIN type
+Advanced concepts: Self joins, multiple conditions, combining with WHERE/GROUP BY
+Common mistakes: What to avoid
+
+Features:
+
+20 cards with detailed explanations
+Code examples with sample data and results
+Quick reference guide at the bottom
+Visual highlights showing what each JOIN returns
+What you'll learn:
+
