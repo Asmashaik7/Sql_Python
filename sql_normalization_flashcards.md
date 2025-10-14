@@ -59,6 +59,6 @@ An interactive set of flashcards designed to help learners **master database nor
 
 ## 🏗️ About This Project
 
-This project was created as part of my **SQL learning journey**, connecting theoretical database design with **real-world data analysis applications**.
+This project was created by using claude artifacts as part of my **SQL learning journey**, connecting theoretical database design with **real-world data analysis applications**.
 
 > 💡 Built for learners for data analytics roles, especially those aiming to strengthen SQL fundamentals
