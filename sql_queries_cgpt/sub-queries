@@ -1,0 +1,150 @@
+# Database Setup
+
+# Let’s assume you have these two tables:
+
+# 1️⃣ employees
+
+# emp_id	name	dept_id	salary	experience
+# 1	Rahul	101	50000	2
+# 2	Priya	102	70000	5
+# 3	Ankit	101	55000	3
+# 4	Meena	103	80000	7
+# 5	Arjun	102	60000	4
+# 6	Simran	101	90000	10
+
+# 2️⃣ departments
+
+# dept_id	dept_name
+# 101	HR
+# 102	IT
+# 103	Finance
+# 💡 Practice Questions with Answers
+# Q1. Find employees who earn more than the average salary.
+
+# Query:
+
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+
+# Explanation:
+# The subquery calculates the average salary of all employees.
+# The main query lists employees earning above that average.
+
+Q2. Find the employees who work in the same department as ‘Priya’.
+
+Query:
+
+SELECT name, dept_id
+FROM employees
+WHERE dept_id = (
+  SELECT dept_id FROM employees WHERE name = 'Priya'
+);
+
+
+# Output:
+# Rahul, Ankit, and Arjun (since Priya is from IT → dept_id 102)
+
+# Q3. Find departments that have at least one employee earning more than ₹75,000.
+
+# Query:
+
+SELECT dept_name
+FROM departments
+WHERE dept_id IN (
+  SELECT DISTINCT dept_id
+  FROM employees
+  WHERE salary > 75000
+);
+
+
+# Explanation:
+# The subquery selects department IDs with salaries above ₹75,000.
+# The outer query converts them to department names.
+
+# Q4. Find the highest-paid employee in each department.
+
+# Query:
+
+SELECT name, dept_id, salary
+FROM employees e
+WHERE salary = (
+  SELECT MAX(salary)
+  FROM employees
+  WHERE dept_id = e.dept_id
+);
+
+
+# Explanation:
+# For each department, the subquery finds the max salary.
+# The outer query returns the employee who earns that.
+
+# Q5. Find employees whose salary is greater than the average salary of their department.
+
+# Query:
+
+SELECT name, dept_id, salary
+FROM employees e
+WHERE salary > (
+  SELECT AVG(salary)
+  FROM employees
+  WHERE dept_id = e.dept_id
+);
+
+
+# Explanation:
+# This compares each employee’s salary with their department’s average.
+
+# Q6. Find employees who are not in the HR department using a subquery.
+
+# Query:
+
+SELECT name
+FROM employees
+WHERE dept_id NOT IN (
+  SELECT dept_id FROM departments WHERE dept_name = 'HR'
+);
+
+# Q7. Display department names where the average salary is above ₹60,000.
+
+# Query:
+
+SELECT dept_name
+FROM departments
+WHERE dept_id IN (
+  SELECT dept_id
+  FROM employees
+  GROUP BY dept_id
+  HAVING AVG(salary) > 60000
+);
+
+# Q8. Find employees who earn the minimum salary in the company.
+
+# Query:
+
+SELECT name, salary
+FROM employees
+WHERE salary = (
+  SELECT MIN(salary) FROM employees
+);
+
+# Q9. Find employees who earn more than at least one person in the HR department.
+
+# Query:
+
+SELECT name, salary
+FROM employees
+WHERE salary > ANY (
+  SELECT salary FROM employees WHERE dept_id = 101
+);
+
+# Q10. Find employees who earn more than everyone in the HR department.
+
+# Query:
+
+SELECT name, salary
+FROM employees
+WHERE salary > ALL (
+  SELECT salary FROM employees WHERE dept_id = 101
+);
