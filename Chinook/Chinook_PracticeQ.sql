@@ -46,41 +46,63 @@ where Name='Queen';
 select * from Album;
 
 /*
-Q6:
+Q6:List all artists whose name starts with ‘A’
 */
--- Your Query:
+SELECT ArtistId, Name
+FROM Artist
+WHERE Name LIKE 'A%';
 GO
 
 
 /*
-Q7:
+Q7:List all artists whose name starts with ‘A’ with case sensitive
 */
--- Your Query:
+SELECT ArtistId, Name
+FROM Artist
+WHERE lower(Name) LIKE 'a%';
 GO
 
 
 /*
-Q8:
+Q8:Show all albums along with their Artist names
 */
--- Your Query:
+SELECT ar.ArtistId, ar.Name AS ArtistName, al.AlbumId, al.Title AS AlbumTitle
+FROM Album al
+JOIN Artist ar ON al.ArtistId = ar.ArtistId
+ORDER BY ar.ArtistId, al.AlbumId;
 GO
 
 
 /*
-Q9:
+Q9:Find all tracks whose UnitPrice is greater than 0.99
 */
--- Your Query:
+SELECT TrackId, Name AS TrackName, UnitPrice
+FROM Track
+WHERE UnitPrice > 0.99
+ORDER BY UnitPrice DESC;
+
 GO
 
 
 /*
-Q10:
+Q10:Count how many tracks are in each Album
 */
--- Your Query:
+SELECT al.AlbumId, al.Title AS AlbumTitle, COUNT(t.TrackId) AS TrackCount
+FROM Album al
+LEFT JOIN Track t ON al.AlbumId = t.AlbumId
+GROUP BY al.AlbumId, al.Title
+ORDER BY TrackCount DESC, al.Title;
 GO
 
 
-
+/*
+Q11:Find the total number of customers from each Country
+*/
+SELECT Country, COUNT(CustomerId) AS CustomerCount
+FROM Customer
+GROUP BY Country
+ORDER BY CustomerCount DESC, Country;
+GO
 =========================================================
 -- LEVEL 3: GROUP BY QUERIES
 =========================================================
