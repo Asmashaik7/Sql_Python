@@ -36,6 +36,14 @@ select * from Track where UnitPrice>0.99;
 GO
 
 /*Q5:Find all albums released by the Artist ‘Queen’*/
+select Ar.ArtistId, Ar.Name,al.Title
+from Artist Ar
+join Album Al on
+Ar.ArtistId = Al.ArtistId
+where Name='Queen';
+
+
+select * from Album;
 
 /*
 Q6:
