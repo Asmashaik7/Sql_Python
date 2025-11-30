@@ -186,45 +186,77 @@ Not doing any aggregation
 Not grouping data
 */
 
+/*
+Q16:List all customers who live in Brazil.
+*/
+SELECT *
+FROM Customer
+WHERE Country = 'Brazil';
+GO
 
-=========================================================
+
+/*
+Q17:List all customers who live in Brazil.*/
+*/
+SELECT 
+    CustomerId, 
+    FirstName, 
+    LastName, 
+    Country
+FROM Customer
+WHERE Country = 'Brazil';
+GO
+
+
+/*
+Q18:Show all tracks where the AlbumId is 10.
+*/
+Select TrackId,
+Name,
+AlbumId
+from Track
+where AlbumId=10;
+GO
+
+
+/*
+Q19:Find all employees whose Title contains the word 'Manager'.
+*/
+Select EmployeeId,
+LastName,
+FirstName,
+Title
+from Employee
+where Title LIKE '%Manager%';
+GO
+select * from Employee;
+
+/*
+Q20:Show the first 10 tracks ordered by Name alphabetically.
+*/
+select TrackId,
+Name
+from Track
+order by Name ASC LIMIT 10;
+--this works perfect in MySQL server or sqlite, not in SQLServer--
+
+select Top 20
+TrackId,
+Name
+from Track
+order by Name ASC;
+
+/*List all invoices with total amount greater than 10.*/
+select InvoiceID,
+Total
+from INVOICE
+where Total>10
+order by Total DESC;
+
+
+GO=========================================================
 -- LEVEL 4: SUBQUERY PRACTICE
 =========================================================
-
-/*
-Q16:
-*/
--- Your Query:
-GO
-
-
-/*
-Q17:
-*/
--- Your Query:
-GO
-
-
-/*
-Q18:
-*/
--- Your Query:
-GO
-
-
-/*
-Q19:
-*/
--- Your Query:
-GO
-
-
-/*
-Q20:
-*/
--- Your Query:
-GO
-
 
 
 =========================================================
