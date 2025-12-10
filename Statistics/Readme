@@ -1,1 +1,123 @@
-Here I am learning/working on Statistics.
+📊 Statistics & Hypothesis Testing – Learning Summary
+
+This folder contains my notes, practice notebooks, and case studies covering all essential topics in Statistics for Data Analysis.
+These concepts are widely used in data analytics, machine learning, and decision-making.
+
+🔶 1. Descriptive Statistics
+Measures of Central Tendency
+Concept	Meaning	Pandas Code
+Mean	Average value	df['col'].mean()
+Median	Middle value after sorting	df['col'].median()
+Mode	Most frequent value	df['col'].mode()[0]
+Measures of Dispersion
+Concept	Meaning	Pandas Code
+Range	Max − Min	df['col'].max() - df['col'].min()
+Variance	Average squared distance from mean	df['col'].var()
+Standard Deviation	√Variance (spread of data)	df['col'].std()
+🔶 2. Probability Concepts
+
+Random Variables
+
+Events and Outcomes
+
+Sampling and Population
+
+Probability Distributions (Normal distribution basics)
+
+🔶 3. Hypothesis Testing
+Null & Alternative Hypothesis
+
+Null Hypothesis (H₀): No effect, no difference
+
+Alternative Hypothesis (H₁): There is an effect/difference
+
+Significance Level (α)
+
+Common value: 0.05
+
+Chance of rejecting the null hypothesis when it is actually true.
+
+Type I & Type II Errors
+Error	Meaning
+Type I Error (False Positive): Rejecting a true H₀	
+Type II Error (False Negative): Not rejecting a false H₀	
+🔶 4. Hypothesis Tests
+Z-Test
+
+Used when:
+
+Population variance known OR sample size > 30
+
+Tests mean differences
+
+T-Test
+
+Used when:
+
+Population variance unknown
+
+Sample size < 30
+
+More realistic for real-world data
+
+Chi-Square Test
+
+Used for:
+
+Categorical data
+
+Testing relationship between variables
+
+Goodness of fit
+
+🔶 5. Correlation Analysis
+
+Measures the strength and direction of a relationship between two variables.
+
+Range: −1 to +1
+
++1 → strong positive
+
+−1 → strong negative
+
+0 → no relationship
+
+Pandas:
+
+df.corr()
+
+🔶 6. Linear Regression
+
+Used to predict one value based on another.
+
+Simple Linear Regression
+
+Formula:
+y = m x + c
+
+Where:
+
+x = independent variable
+
+y = dependent variable
+
+m = slope
+
+c = intercept
+
+Used for forecasting and trend analysis.
+
+🔶 7. Included in This Folder
+
+Jupyter Notebooks for all topics
+
+Case studies with code
+
+Notes summarizing every concept in simple language
+
+Visualizations for regression & correlation
+
+⭐ About This Learning
+
+This folder reflects my understanding of statistical concepts used in Data Analysis.
+I practiced each topic with real datasets, recreated examples from recordings, and wrote explanations in simple language to ensure I fully understood the concepts.
