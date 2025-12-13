@@ -1,0 +1,100 @@
+# 📊 HR Analytics Case Study – Employee Performance & Retention
+
+## 📌 Project Overview
+This project analyzes HR data to understand employee performance patterns, identify retention-related trends, and provide data-driven recommendations to improve productivity and reduce employee turnover.
+
+The analysis follows a structured analytics workflow using Python and pandas, covering data understanding, cleaning, exploratory data analysis (EDA), and business-focused insights.
+
+---
+
+## 🎯 Problem Statement
+The objective of this project is to:
+- Identify performance patterns based on factors such as age, education, department, and training.
+- Examine retention-related trends using employee characteristics such as tenure, performance ratings, KPIs, and awards.
+- Provide actionable recommendations to improve employee engagement, productivity, and long-term retention.
+
+---
+
+## 📂 Dataset Overview
+- **Total Records:** 17,417 employees  
+- **Total Features:** 13 columns  
+
+### Key Features
+- Demographics: `age`, `gender`, `education`, `region`
+- Performance: `KPIs_met_more_than_80`, `previous_year_rating`, `awards_won`
+- Training: `no_of_trainings`, `avg_training_score`
+- Retention Proxy: `length_of_service`
+- Organizational: `department`, `recruitment_channel`
+
+---
+
+## 🛠 Tools & Technologies
+- Python  
+- Pandas  
+- Jupyter Notebook  
+
+---
+
+## 🔍 Project Workflow
+
+### 1. Data Understanding & Initial Exploration
+- Loaded the dataset and reviewed its structure
+- Checked data types and column distributions
+- Identified missing values and data quality issues
+
+### 2. Data Cleaning & Preprocessing
+- Removed duplicate records
+- Handled missing values:
+  - `education` imputed using mode
+  - `previous_year_rating` imputed using median
+- Validated data consistency
+
+### 3. Exploratory Data Analysis (EDA)
+
+#### Performance Analysis
+- Analyzed KPI achievement, training scores, and ratings
+- Compared performance across departments, age groups, and education levels
+- Evaluated the impact of training on performance
+
+#### Retention Trend Analysis (Using Proxies)
+- Used `length_of_service` as a proxy for retention
+- Studied retention trends based on ratings, KPIs, awards, and age groups
+- Identified higher attrition risk among early-career employees
+
+#### Relationship Analysis
+- Examined relationships between training effectiveness, performance, and retention
+- Identified department-level performance and retention patterns
+
+---
+
+## 💡 Key Insights
+- Employees with higher training scores are more likely to meet KPIs.
+- Award-winning employees tend to have longer tenure.
+- Early-career employees show higher retention risk.
+- Performance and retention patterns vary significantly across departments.
+
+---
+
+## ✅ Recommendations
+- Strengthen department-specific and targeted training programs.
+- Introduce structured onboarding and mentorship for early-career employees.
+- Use performance ratings for proactive engagement and retention strategies.
+- Expand recognition and rewards programs.
+- Design customized interventions for departments with lower retention.
+
+---
+
+## 🏁 Conclusion
+This project demonstrates how HR data can be leveraged to uncover meaningful insights into employee performance and retention. Data-driven HR strategies focused on training, recognition, and early-career support can significantly improve productivity and reduce employee turnover.
+
+---
+
+## 📎 Repository Contents
+- Jupyter Notebook containing full analysis, insights, and conclusions
+
+---
+
+## 🙋‍♀️ About Me
+**Asma Shaik**  
+Career Restart | Aspiring Data Analyst  
+Skills: Python, SQL, Power BI, Excel
