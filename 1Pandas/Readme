@@ -1,1 +1,55 @@
-This is a Pandas folder
+Pandas Projects & Practice
+
+This folder contains hands-on Python (Pandas) projects and practice notebooks focused on data cleaning, exploratory data analysis (EDA), and deriving business insights from real-world datasets.
+These projects are part of my career transition into Data Analytics, built through structured learning and consistent practice.
+
+🧠 Skills & Concepts Covered
+
+Data Cleaning & Wrangling
+
+Exploratory Data Analysis (EDA)
+
+Handling missing values and duplicates
+
+Grouping, aggregation, and filtering
+
+Trend analysis and business insights
+
+Basic data visualisation
+
+🛠️ Tools & Libraries Used
+
+Python
+
+Pandas
+
+NumPy
+
+Matplotlib
+
+Seaborn
+
+Jupyter Notebook
+
+📁 Projects Included
+1️⃣ Diwali Sales Analysis
+
+Analysed retail sales data to understand customer purchasing behaviour and high-performing product categories.
+
+Explored sales trends across regions and demographics to support festive sales strategy.
+
+2️⃣ Employee Performance & Retention Analysis
+
+Analysed employee demographic, training, and performance data to identify factors influencing retention and attrition.
+
+Derived insights to support productivity improvement and targeted employee engagement strategies.
+
+🎯 Objective
+
+The goal of these projects is to:
+
+Strengthen practical understanding of Pandas for data analysis
+
+Apply analytical thinking to business-oriented datasets
+
+Build a solid foundation for Data Analyst / BI roles
