@@ -1,12 +1,12 @@
-🎵 Chinook SQL Analysis
-📌 Overview
+**🎵 Chinook SQL Analysis**
+**📌 Overview**
 
 This project involves SQL-based analysis of the Chinook database, a sample music store database.
 I worked on this project as part of my SQL practice during Internshala training, focusing on writing structured queries to analyze business-related questions using real relational data.
 
 The project demonstrates my ability to work with multi-table databases, apply analytical SQL concepts, and extract meaningful insights.
 
-🎯 Objectives
+**🎯 Objectives**
 
 * Practice querying a relational database using SQL
 
@@ -16,27 +16,27 @@ The project demonstrates my ability to work with multi-table databases, apply an
 
 * Build confidence in writing clean and readable SQL queries
 
-🗄️ Dataset
+**🗄️ Dataset**
 
 * Database: Chinook (Music Store Database)
 
 * Domain: Digital music sales
 
-*Key tables used:
+**Key tables used:**
 
-Customer
+- Customer
 
-Invoice & InvoiceLine
+- Invoice & InvoiceLine
 
-Track
+- Track
 
-Album
+- Album
 
-Artist
+- Artist
 
-Genre
+- Genre
 
-Employee
+- Employee
 
 🛠️ SQL Concepts Used
 
@@ -54,7 +54,7 @@ Employee
 
 * Views and calculated fields
 
-🔍 Analysis Performed
+**🔍 Analysis Performed**
 
 * Customer and sales analysis
 
@@ -66,23 +66,18 @@ Employee
 
 * Ranking queries using window functions
 
-📂 Project Files
+**📂 Project Files**
 
 This project includes multiple SQL files covering different concepts:
 
-Core database queries
+- Core database queries
 
-Practice questions
+- Practice questions
 
-Subqueries and views
+- Subqueries and views
 
-Ranking and analytical queries
+- Ranking and analytical queries
 
-🔗 Project Link
-
-👉 Full SQL scripts available here:
-https://github.com/Asmashaik7/Sql_Python/tree/main/Chinook
-
-🧠 Key Takeaway
+**🧠 Key Takeaway**
 
 This project strengthened my ability to analyze real-world relational data using SQL and improved my confidence in writing queries that answer business-driven questions.
