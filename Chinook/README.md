@@ -81,3 +81,5 @@ This project includes multiple SQL files covering different concepts:
 **🧠 Key Takeaway**
 
 This project strengthened my ability to analyze real-world relational data using SQL and improved my confidence in writing queries that answer business-driven questions.
+
+**Note:** ChinookDB.sql is used to initialize the database schema and seed data. Analysis queries are maintained in separate SQL files.
