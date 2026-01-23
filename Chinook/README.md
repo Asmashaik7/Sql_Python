@@ -1,12 +1,12 @@
-**🎵 Chinook SQL Analysis**
-**📌 Overview**
+** Chinook SQL Analysis**
+** Overview**
 
 This project involves SQL-based analysis of the Chinook database, a sample music store database.
 I worked on this project as part of my SQL practice during Internshala training, focusing on writing structured queries to analyze business-related questions using real relational data.
 
 The project demonstrates my ability to work with multi-table databases, apply analytical SQL concepts, and extract meaningful insights.
 
-**🎯 Objectives**
+** Objectives**
 
 * Practice querying a relational database using SQL
 
@@ -16,7 +16,7 @@ The project demonstrates my ability to work with multi-table databases, apply an
 
 * Build confidence in writing clean and readable SQL queries
 
-**🗄️ Dataset**
+** Dataset**
 
 * Database: Chinook (Music Store Database)
 
@@ -38,7 +38,7 @@ The project demonstrates my ability to work with multi-table databases, apply an
 
 - Employee
 
-🛠️ SQL Concepts Used
+**SQL Concepts Used**
 
 * SELECT, WHERE, ORDER BY
 
@@ -54,7 +54,7 @@ The project demonstrates my ability to work with multi-table databases, apply an
 
 * Views and calculated fields
 
-**🔍 Analysis Performed**
+**Analysis Performed**
 
 * Customer and sales analysis
 
@@ -66,7 +66,7 @@ The project demonstrates my ability to work with multi-table databases, apply an
 
 * Ranking queries using window functions
 
-**📂 Project Files**
+**Project Files**
 
 This project includes multiple SQL files covering different concepts:
 
@@ -78,7 +78,7 @@ This project includes multiple SQL files covering different concepts:
 
 - Ranking and analytical queries
 
-**🧠 Key Takeaway**
+**Key Takeaway**
 
 This project strengthened my ability to analyze real-world relational data using SQL and improved my confidence in writing queries that answer business-driven questions.
 
