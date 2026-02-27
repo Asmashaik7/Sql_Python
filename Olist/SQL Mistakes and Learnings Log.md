@@ -249,3 +249,16 @@ Going deeper than the surface analysis reveals real business insights!
 ---
 
 **Last Updated:** 2026-02-28
+
+# SQL Mistakes and Learnings
+
+## Key Concepts
+
+### GROUP BY and AVG
+- GROUP BY = creates groups
+- AVG = calculates average within each group automatically!
+
+Example:
+GROUP BY payment_type creates separate buckets for credit_card, boleto, etc.
+Then AVG(payment_value) calculates the average WITHIN each bucket!
+
