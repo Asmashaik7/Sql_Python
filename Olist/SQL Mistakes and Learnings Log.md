@@ -237,17 +237,6 @@ Going deeper than the surface analysis reveals real business insights!
 
 ---
 
-## NEXT TOPICS TO MASTER
-
-⬜ CASE statements (conditional logic)  
-⬜ Date/time functions and trending  
-⬜ Window functions (RANK, DENSE_RANK, ROW_NUMBER)  
-⬜ CTEs (Common Table Expressions)  
-⬜ Subqueries  
-⬜ HAVING clause (filtering after GROUP BY)  
-
----
-
 **Last Updated:** 2026-02-28
 
 # SQL Mistakes and Learnings
@@ -261,4 +250,8 @@ Going deeper than the surface analysis reveals real business insights!
 Example:
 GROUP BY payment_type creates separate buckets for credit_card, boleto, etc.
 Then AVG(payment_value) calculates the average WITHIN each bucket!
+======================================================================================================
+
+If working on text → use COUNT
+If working on numbers → use aggregates
 

@@ -252,7 +252,6 @@ ORDER BY oi.order_item_id;
 -- creating a dedicated B2B sales channel with volume discounts and business 
 -- account features to capture more wholesale opportunities.
 
---level 2
 -- ================================================
 -- Q7: What are the most popular payment methods?
 -- ================================================
@@ -278,3 +277,174 @@ order by total_orders DESC;
 -- indicating usage for small purchases or promotional discounts. Debit card usage 
 -- is surprisingly low (1.5%), likely due to Brazilian preference for credit card 
 -- installment payment options.
+
+
+-- ================================================
+-- Q8: How are orders distributed by value segments?
+-- ================================================
+/*"How can we segment orders into Low, Medium, and High value categories?"
+Why this matters:
+
+Marketing can target different customer segments
+Shipping teams can prioritize high-value orders
+Fraud detection focuses on high-value anomalies*/
+
+use OlistEcommerce;
+
+select
+    case
+        when payment_value<100 then 'Low value'
+        when payment_value between 100 and 500 then 'Medium value'
+        else 'High value'
+    end as order_value_segment,
+    count(distinct order_id) as total_orders,
+    round(sum(payment_value),2) as total_revenue,
+    round(avg(payment_value),2) as avg_order_value
+from olist_order_payments_dataset
+group by 
+    case
+        when payment_value<100 then 'Low value'
+        when payment_value between 100 and 500 then 'Medium value'
+        else 'High value'
+    end
+order by total_orders desc;
+
+-- Result:
+-- Low Value:     48,493 orders | 2,941,315 BRL |  56.72 BRL avg
+-- Medium Value:  47,539 orders | 9,125,335 BRL | 191.01 BRL avg
+-- High Value:     4,239 orders | 3,942,223 BRL | 926.27 BRL avg
+
+-- Insight: Customer value distribution follows the Pareto principle — just 4% 
+-- of customers (high-value segment) contribute 25% of total revenue with an 
+-- average order value of 926 BRL. The mid-value segment drives the bulk of 
+-- revenue at 57% despite representing 47% of orders. This suggests opportunity 
+-- for (1) VIP programs targeting high-value customers, (2) upselling strategies 
+-- to move low-value customers to mid-value tier, and (3) retention campaigns 
+-- focused on the profitable mid-value segment.
+
+
+/*## SQL Order of Execution
+1. FROM
+2. WHERE
+3. GROUP BY (can't use SELECT aliases - must repeat CASE)
+4. SELECT (creates aliases here)
+5. ORDER BY (CAN use SELECT aliases!)
+
+That's why we repeat CASE in GROUP BY but can use alias in ORDER BY!
+case stat creates derived columns, It is created temporarily when the query runs.Exists only in that query output, Disappears after execution, unlike calculated column which exists in the table(model)*/
+
+-- ===============================================================
+-- Q9: What is the average delivery time for completed orders?
+-- ================================================================
+select 
+    count(distinct order_id) as total_orders,
+    avg(datediff(day,order_purchase_timestamp,order_delivered_customer_date)) as delivery_days,
+    min(datediff(day,order_purchase_timestamp,order_delivered_customer_date)) as min_delivery_days,
+    max(datediff(day,order_purchase_timestamp,order_delivered_customer_date)) as max_delivery_days,
+    order_status
+from olist_orders_dataset
+where order_status='delivered'
+and order_delivered_customer_date is not null
+group by order_status;--inorder to exclude the empty delivery dates.
+
+-- Result:
+-- 96,470 delivered orders
+-- Average: 12 days
+-- Fastest: 0 days (same day delivery!)
+-- Slowest: 210 days (7 months!)
+
+-- Insight: Olist maintains a reasonable average delivery time of 12 days 
+-- for a country as large as Brazil. However, the extreme range (0-210 days) 
+-- reveals significant operational variance. Same-day delivery capability exists 
+-- for local orders, likely in São Paulo metro area. The 210-day outlier suggests 
+-- either remote region deliveries, logistics issues, or data quality problems 
+-- worth investigating. This wide variance likely impacts customer satisfaction 
+-- scores and could benefit from delivery time prediction models.
+
+-- Find the order that took 210 days
+SELECT 
+    o.order_id,
+    c.customer_state,
+    c.customer_city,
+    o.order_purchase_timestamp,
+    o.order_delivered_customer_date,
+    DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date) AS delivery_days
+FROM olist_orders_dataset o
+JOIN olist_customers_dataset c
+    ON o.customer_id = c.customer_id
+WHERE o.order_status = 'delivered'
+  AND DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date) = 210;
+
+-- ================================================
+-- BONUS INVESTIGATION: Delayed Delivery Analysis by State
+-- ================================================
+-- Purpose: Investigate orders with delivery times exceeding 50 days
+-- to identify geographic patterns and operational bottlenecks
+
+-- Step 1: Count orders with delivery > 50 days
+SELECT
+    o.order_id,
+    c.customer_state,
+    o.order_purchase_timestamp,
+    o.order_delivered_customer_date,
+    DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date) AS delivery_days
+FROM olist_orders_dataset o
+JOIN olist_customers_dataset c
+    ON o.customer_id = c.customer_id
+WHERE o.order_status = 'delivered'
+  AND DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date) > 50
+ORDER BY delivery_days DESC;
+
+-- Result: 632 orders took longer than 50 days to deliver (~0.65% of all deliveries)
+
+-- Step 2: Analyze delayed deliveries by state
+SELECT 
+    c.customer_state,
+    COUNT(o.order_id) AS delayed_orders,
+    ROUND(AVG(DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date)), 2) AS avg_delivery_days
+FROM olist_orders_dataset o
+JOIN olist_customers_dataset c
+    ON o.customer_id = c.customer_id
+WHERE o.order_status = 'delivered'
+  AND DATEDIFF(day, o.order_purchase_timestamp, o.order_delivered_customer_date) > 50
+GROUP BY c.customer_state
+ORDER BY delayed_orders DESC;
+
+-- Result (Top 10):
+-- RJ (Rio de Janeiro):  214 delayed orders | 64 days avg
+-- SP (São Paulo):        88 delayed orders | 75 days avg
+-- BA (Bahia):            43 delayed orders | 80 days avg
+-- CE (Ceará):            34 delayed orders | 73 days avg
+-- MG (Minas Gerais):     34 delayed orders | 64 days avg
+-- PA (Pará):             33 delayed orders | 64 days avg
+-- RS (Rio Grande do Sul):32 delayed orders | 66 days avg
+-- PE (Pernambuco):       26 delayed orders | 64 days avg
+-- ES (Espírito Santo):   14 delayed orders | 93 days avg
+-- GO (Goiás):            13 delayed orders | 77 days avg
+
+-- Notable outliers:
+-- AP (Amapá):   1 order, 187 days (remote Amazon region, boat/plane access)
+-- SE (Sergipe): 6 orders, 103 days (concerning - not a remote state)
+-- PI (Piauí):   7 orders, 98 days
+
+-- Key Findings:
+-- 1. RIO DE JANEIRO PROBLEM: 214 delayed orders (34% of all delays) despite being 
+--    a major metro area. RJ represents 1.8% delay rate vs SP's 0.2% - suggests 
+--    RJ-specific logistics challenges (warehouse location, urban infrastructure, 
+--    security issues in certain neighborhoods).
+--
+-- 2. REMOTE REGION DELAYS: Northern/Amazon states (AP, AC, RR, AM) show expected 
+--    extreme delays (69-187 days) due to geographic isolation and limited road access.
+--
+-- 3. SERGIPE ANOMALY: 103-day average for an accessible northeastern state indicates 
+--    potential operational failure worth investigating.
+--
+-- 4. VOLUME VS SEVERITY: While RJ has most delayed orders (214), states like AP 
+--    have worse average times (187 days) but lower volume due to smaller population.
+
+-- Business Recommendations:
+-- • URGENT: Audit RJ delivery operations - 214 delays unacceptable for major city
+-- • Set delivery expectations: Display realistic timelines for remote regions at checkout
+-- • Investigate SE logistics: 103 days for accessible state suggests failure
+-- • Consider opening distribution center in RJ to reduce delays
+-- • Implement delivery time prediction model based on customer state/city
