@@ -254,4 +254,51 @@ Then AVG(payment_value) calculates the average WITHIN each bucket!
 
 If working on text → use COUNT
 If working on numbers → use aggregates
+============================================================
+Mistake 7: Using Aliases in GROUP BY
+Date: 2026-03-02
+Query Context: Q10 Monthly Order Trends
+What Happened:
+sqlGROUP BY month, year  -- aliases don't work here!
+Why It Happened:
+GROUP BY runs BEFORE SELECT, so aliases don't exist yet!
+The Fix:
+sql:
+GROUP BY MONTH(order_purchase_timestamp), 
+         YEAR(order_purchase_timestamp)
 
+Lesson Learned:
+SQL Order of Execution:
+
+FROM → 2. WHERE → 3. GROUP BY → 4. SELECT → 5. ORDER BY
+
+GROUP BY can't use SELECT aliases — repeat the full expression!
+============================================================
+Mistake :Extra Comma in SELECT
+Query Context: Q11 CTE
+What Happened:
+sqlROUND(SUM(op.payment_value), 2) AS total_spent,  -- extra comma!
+FROM olist_customers_dataset
+Lesson Learned:
+Last column in SELECT never has a comma!
+
+Mistake 9: ORDER BY Inside CTE
+Query Context: Q12 CTE
+What Happened:
+sql
+WITH monthly_sales AS
+(
+    SELECT ...
+    ORDER BY total_orders DESC  -- not allowed inside CTE!
+)
+Lesson Learned:
+ORDER BY only goes in final SELECT, never inside CTE! CTEs are temporary tables — you can't sort a table!
+
+Mistake 10: Missing columns in final SELECT
+Query Context: Q11
+What Happened:
+sqlSELECT RANK() OVER (ORDER BY total_spent DESC)  
+-- forgot customer_unique_id and total_spent!
+Lesson Learned:
+Always select all meaningful columns — not just the calculated one!
+--------------------------------------------------------------------------------------------

@@ -448,3 +448,6 @@ ORDER BY delayed_orders DESC;
 -- • Investigate SE logistics: 103 days for accessible state suggests failure
 -- • Consider opening distribution center in RJ to reduce delays
 -- • Implement delivery time prediction model based on customer state/city
+
+--"How did order volumes trend month by month? Which months had the highest and lowest orders?"
+--Which table do you think contains the order dates we need for monthly trends?
