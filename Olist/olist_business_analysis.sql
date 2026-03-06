@@ -449,5 +449,238 @@ ORDER BY delayed_orders DESC;
 -- • Consider opening distribution center in RJ to reduce delays
 -- • Implement delivery time prediction model based on customer state/city
 
---"How did order volumes trend month by month? Which months had the highest and lowest orders?"
---Which table do you think contains the order dates we need for monthly trends?
+-- ================================================
+-- Q10: What are the monthly order trends?
+-- ================================================
+SELECT  
+    COUNT(DISTINCT order_id) AS total_orders,  
+    MONTH(order_purchase_timestamp) AS month, 
+    YEAR(order_purchase_timestamp) AS year 
+FROM olist_orders_dataset 
+GROUP BY MONTH(order_purchase_timestamp), YEAR(order_purchase_timestamp)  
+ORDER BY total_orders DESC;
+
+/*Result
+7211	3	2018
+6939	4	2018
+6873	5	2018
+6728	2	2018
+6512	8	2018
+6292	7	2018
+6167	6	2018
+5673	12	2017
+4631	10	2017
+4331	8	2017
+4285	9	2017
+4026	7	2017
+3700	5	2017
+3245	6	2017
+2682	3	2017
+2404	4	2017
+1780	2	2017
+800	1	2017
+324	10	2016
+16	9	2018
+4	10	2018
+4	9	2016
+1	12	2016
+*/
+
+-- Result:
+-- Peak month: March 2018 with 7,211 orders
+-- Lowest: September 2016 (4 orders - dataset just starting)
+
+-- Insight: Olist showed strong consistent growth from 2016 to 2018,
+-- peaking in March 2018 with 7,211 orders. The dataset appears to end
+-- mid-2018, as Sep/Oct 2018 show only 16 and 4 orders respectively,
+-- indicating incomplete data rather than actual decline.
+
+-- ================================================
+-- Q12: Month-over-Month Order Growth
+-- ================================================
+WITH monthly_sales AS
+(
+    SELECT 
+        COUNT(DISTINCT order_id) AS total_orders,
+        MONTH(order_purchase_timestamp) AS month,
+        YEAR(order_purchase_timestamp) AS year
+    FROM olist_orders_dataset
+    GROUP BY MONTH(order_purchase_timestamp), 
+             YEAR(order_purchase_timestamp)
+)
+SELECT
+    year,
+    month,
+    total_orders,
+    LAG(total_orders) OVER (ORDER BY year, month) AS previous_month_orders,
+    total_orders - LAG(total_orders) OVER (ORDER BY year, month) AS month_growth
+FROM monthly_sales;
+-- Note: ORDER BY only goes in final SELECT, never inside CTE!
+-- Note: LAG() gives the value from the previous row
+
+-- Result (Key highlights):
+-- Nov 2017: 7,544 orders | Growth: +2,913 (biggest spike!)
+-- Sep 2018: 16 orders    | Growth: -6,496 (incomplete data!)
+-- First row (Sep 2016): NULL for previous_month — no prior data exists
+
+-- Insight: Month-over-month analysis using LAG() revealed strong growth 
+-- throughout 2017, peaking in November 2017 with a single month growth of 
+-- 2,913 orders, likely driven by Black Friday. The dataset shows consistent 
+-- growth from 2016 to mid-2018. Negative growth in Sep/Oct 2018 (-6,496) 
+-- represents incomplete data rather than actual decline.
+SELECT 
+    customer_unique_id,
+    total_spent,
+    RANK() OVER (ORDER BY total_spent DESC) AS rank_by_spent
+FROM customer_spent;
+
+-- Result (Top 5):
+-- Rank 1: 0a0a92112bd4c708ca5fde585afaa872 | 13,664.08 BRL
+-- Rank 2: 46450c74a0d8c5ca9395da1daac6c120 |  9,553.02 BRL
+-- Rank 3: da122df9eeddfedc1dc1f5349a1a690c |  7,571.63 BRL
+-- Rank 4: 763c8b1c9c68a0229c42c9fc6f662b93 |  7,274.88 BRL
+-- Rank 5: dc4802a71eae9be1dd28f5d788ceb526 |  6,929.31 BRL
+
+-- Insight: Using CTE and RANK() window function, top customers were ranked 
+-- by total spending. The highest spending customer spent 13,664.08 BRL in a 
+-- single bulk purchase of 8 landline phones, suggesting B2B transaction 
+-- behavior. Top 5 customers all spent above 6,929 BRL.
+
+================================================================================
+/*Q12: Month-over-Month Order Growth
+Business Question:
+
+"How much did orders grow or decline each month compared to the previous month?"*/
+================================================================================
+
+with monthly_sales as
+(
+select count(distinct order_id) as total_orders,
+month(order_purchase_timestamp) as Month,
+year(order_purchase_timestamp) as Year
+from olist_orders_dataset
+group by month(order_purchase_timestamp), year(order_purchase_timestamp)
+)
+--Golden Rule: ORDER BY only goes in the final SELECT, never inside a CTE
+--LAG() simply means:"Give me the value from the previous row"
+
+select
+month,
+year,
+total_orders,
+lag(total_orders) over(order by year, month) as previous_month_orders,
+total_orders - lag(total_orders) over(order by year, month) as Month_growth
+from monthly_sales;
+
+-- Result (Key Highlights):
+-- Nov 2017: 7,544 orders | Growth: +2,913 (biggest spike!)
+-- Sep 2018: 16 orders    | Growth: -6,496 (incomplete data!)
+-- First row (Sep 2016): NULL for previous_month - no prior data exists
+
+-- Insight: Month-over-month analysis using LAG() revealed strong growth
+-- throughout 2017, peaking in November 2017 with a single month growth of
+-- 2,913 orders, likely driven by Black Friday. The dataset shows consistent
+-- growth from 2016 to mid-2018. Negative growth in Sep/Oct 2018 (-6,496)
+-- represents incomplete data rather than actual decline.
+
+/*Q13: Category Revenue Ranking
+Business Question:
+"Rank product categories by total revenue - which categories are top performers?"*/
+
+-- ================================================
+-- FIRST ATTEMPT: NULL issue discovered
+-- ================================================
+WITH category_revenue_ranking AS
+(
+    SELECT 
+        p.product_category_name AS category_name,
+        ROUND(SUM(oi.price + oi.freight_value), 2) AS total_revenue
+    FROM olist_order_items_dataset oi
+    JOIN olist_products_dataset p
+        ON oi.product_id = p.product_id
+    GROUP BY p.product_category_name
+)
+
+SELECT 
+    category_name,
+    total_revenue,
+    DENSE_RANK() OVER (ORDER BY total_revenue DESC) AS category_rank
+FROM category_revenue_ranking;
+-- Issue discovered: Rank 20 shows NULL category name!
+-- Fix: Use ISNULL() to replace NULL with 'Uncategorized'
+
+-- ================================================
+-- IMPROVED VERSION: Handling NULL categories
+-- ================================================
+WITH category_revenue_ranking AS
+(
+    SELECT 
+        ISNULL(p.product_category_name, 'Uncategorized') AS category_name,
+        ROUND(SUM(oi.price + oi.freight_value), 2) AS total_revenue
+    FROM olist_order_items_dataset oi
+    JOIN olist_products_dataset p
+        ON oi.product_id = p.product_id
+    GROUP BY p.product_category_name
+)
+SELECT 
+    category_name,
+    total_revenue,
+    DENSE_RANK() OVER (ORDER BY total_revenue DESC) AS category_rank
+FROM category_revenue_ranking;
+
+-- Result: 74 categories ranked by revenue
+-- Rank 1:  beleza_saude                   | 1,441,248.07 BRL
+-- Rank 20: Uncategorized                  |   207,705.09 BRL
+-- Rank 72: cds_dvds_musicais              |       954.99 BRL
+-- Rank 73: fashion_roupa_infanto_juvenil  |       665.36 BRL
+-- Rank 74: seguros_e_servicos             |       324.51 BRL
+
+-- Insight: Using CTE and DENSE_RANK(), 74 product categories were rankedby total revenue. 
+-- beleza_saude leads with 1,441,248.07 BRL in total revenue.
+
+-- Bottom 3 categories generated less than 1,000 BRL, suggesting these are either newly added categories or unpopular products like CDs/DVDs in the streaming era. 
+-- Notably, fashion_roupa_infanto_juvenil (Children & Youth Fashion) at only 665 BRL suggests an untapped opportunity — children's fashion is a 
+-- high-demand market, indicating poor visibility or promotion on the platform rather than lack of demand. In contrast, seguros_e_servicos 
+-- (Insurance & Services) low revenue is expected as consumers typically purchase insurance directly from providers rather than e-commerce platforms.
+
+-- Uncategorized products ranked 20th with 207,705 BRL, highlighting a data quality issue worth fixing.
+
+-- ================================================
+/*Q14: Running Total of Revenue
+Business Question:
+"What is the cumulative revenue month by month?"*/
+-- ================================================
+
+WITH running_total AS
+(
+    SELECT 
+        MONTH(o.order_purchase_timestamp) AS month,
+        YEAR(o.order_purchase_timestamp) AS year,
+        ROUND(SUM(oi.price + oi.freight_value), 2) AS total_revenue
+    FROM olist_order_items_dataset oi
+    JOIN olist_orders_dataset o
+        ON oi.order_id = o.order_id
+    GROUP BY MONTH(o.order_purchase_timestamp), 
+             YEAR(o.order_purchase_timestamp)
+)
+SELECT 
+    year,
+    month,
+    total_revenue,
+    SUM(total_revenue) OVER (ORDER BY year, month) AS running_total_revenue
+FROM running_total;
+
+-- Result (Key Highlights):
+-- First month: Sep 2016  |       354.75 BRL | Running:  354.75 BRL
+-- 5M milestone: Oct 2017 |   769,312.37 BRL | Running:  5,157,164.64 BRL
+-- Peak month:   Nov 2017 | 1,179,143.77 BRL | Running:  6,336,308.41 BRL
+-- Final month:  Sep 2018 |       166.46 BRL | Running: 15,843,553.24 BRL
+
+-- Insight: Using CTE and SUM() OVER(), monthly running total revenue was calculated. Olist accumulated a total of 15,843,553.24 BRL by mid-2018.
+-- Revenue crossed the 5 million BRL milestone in October 2017. Monthly revenue grew significantly from 354.75 BRL in Sep 2016 to over 1,000,000 
+-- BRL per month in 2018, showing strong business growth.
+
+-- Data Quality Note: Sep 2018 shows only 166.46 BRL in monthly revenue compared to 1,000,000+ BRL in previous months, confirming that the 
+-- dataset ends around August 2018. This finding is consistent across 
+-- Q10 (16 orders), Q12 (-6,496 drop) and Q14 (166.46 BRL) —  triangulating that Sep/Oct 2018 data is incomplete.
+

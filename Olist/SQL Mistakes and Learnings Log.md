@@ -2,6 +2,7 @@
 **Analyst:** Asma Shaik  
 **Project:** Olist E-Commerce SQL Portfolio  
 **Started:** February 2026
+**Ended:** March 2026
 
 ---
 
@@ -241,64 +242,198 @@ Going deeper than the surface analysis reveals real business insights!
 
 # SQL Mistakes and Learnings
 
-## Key Concepts
+## KEY CONCEPTS I STRUGGLED WITH
 
 ### GROUP BY and AVG
 - GROUP BY = creates groups
 - AVG = calculates average within each group automatically!
 
-Example:
+**Example:**
 GROUP BY payment_type creates separate buckets for credit_card, boleto, etc.
 Then AVG(payment_value) calculates the average WITHIN each bucket!
-======================================================================================================
 
-If working on text → use COUNT
-If working on numbers → use aggregates
-============================================================
-Mistake 7: Using Aliases in GROUP BY
-Date: 2026-03-02
-Query Context: Q10 Monthly Order Trends
-What Happened:
-sqlGROUP BY month, year  -- aliases don't work here!
-Why It Happened:
+**Quick Rule:**
+- If working on text → use COUNT
+- If working on numbers → use aggregates
+
+---
+
+## MISTAKES LOG
+
+### Mistake 7: Using Aliases in GROUP BY
+**Date:** 2026-03-02
+**Query Context:** Q10 Monthly Order Trends
+
+**What Happened:**
+```sql
+GROUP BY month, year  -- aliases don't work here!
+```
+**Why It Happened:**
 GROUP BY runs BEFORE SELECT, so aliases don't exist yet!
-The Fix:
-sql:
+
+**The Fix:**
+```sql
 GROUP BY MONTH(order_purchase_timestamp), 
          YEAR(order_purchase_timestamp)
-
-Lesson Learned:
+```
+**Lesson Learned:**
 SQL Order of Execution:
-
-FROM → 2. WHERE → 3. GROUP BY → 4. SELECT → 5. ORDER BY
+1. FROM → 2. WHERE → 3. GROUP BY → 4. SELECT → 5. ORDER BY
 
 GROUP BY can't use SELECT aliases — repeat the full expression!
-============================================================
-Mistake :Extra Comma in SELECT
-Query Context: Q11 CTE
-What Happened:
-sqlROUND(SUM(op.payment_value), 2) AS total_spent,  -- extra comma!
+
+---
+
+### Mistake 8: Extra Comma in SELECT
+**Query Context:** Q11 CTE
+
+**What Happened:**
+```sql
+ROUND(SUM(op.payment_value), 2) AS total_spent,  -- extra comma!
 FROM olist_customers_dataset
-Lesson Learned:
+```
+**Lesson Learned:**
 Last column in SELECT never has a comma!
 
-Mistake 9: ORDER BY Inside CTE
-Query Context: Q12 CTE
-What Happened:
-sql
+---
+
+### Mistake 9: ORDER BY Inside CTE
+**Query Context:** Q12 CTE
+
+**What Happened:**
+```sql
 WITH monthly_sales AS
 (
     SELECT ...
     ORDER BY total_orders DESC  -- not allowed inside CTE!
 )
-Lesson Learned:
+```
+**Lesson Learned:**
 ORDER BY only goes in final SELECT, never inside CTE! CTEs are temporary tables — you can't sort a table!
 
-Mistake 10: Missing columns in final SELECT
-Query Context: Q11
-What Happened:
-sqlSELECT RANK() OVER (ORDER BY total_spent DESC)  
+---
+
+### Mistake 10: Missing Columns in Final SELECT
+**Query Context:** Q11
+
+**What Happened:**
+```sql
+SELECT RANK() OVER (ORDER BY total_spent DESC)  
 -- forgot customer_unique_id and total_spent!
-Lesson Learned:
+```
+**Lesson Learned:**
 Always select all meaningful columns — not just the calculated one!
---------------------------------------------------------------------------------------------
+
+---
+
+### Mistake 11: Wrong CTE Syntax Order
+**Query Context:** Q13 Category Revenue Ranking
+
+**What Happened:**
+```sql
+with as category_revenue_ranking  -- wrong!
+```
+**The Fix:**
+```sql
+with category_revenue_ranking as  -- correct!
+```
+**Lesson Learned:**
+CTE syntax is always: `WITH name AS ()` — name comes BEFORE `as`!
+
+---
+
+### Mistake 12: Extra Closing Bracket in Final SELECT
+**Query Context:** Q13
+
+**What Happened:**
+```sql
+from category_revenue_ranking
+)  -- extra bracket!
+```
+**Lesson Learned:**
+Brackets only wrap the CTE body — final SELECT has no closing bracket!
+
+---
+
+### Mistake 13: Double Quotes Instead of Single Quotes
+**Query Context:** Q13 ISNULL()
+
+**What Happened:**
+```sql
+ISNULL(p.product_category_name, "Uncategorized")  -- wrong!
+```
+**The Fix:**
+```sql
+ISNULL(p.product_category_name, 'Uncategorized')  -- correct!
+```
+**Lesson Learned:**
+SQL Server always uses **single quotes** for text values — never double quotes!
+
+---
+
+### Mistake 14: ORDER BY Inside CTE ⚠️
+**Query Context:** Q14 and Q15
+
+**What Happened:**
+```sql
+WITH running_total AS
+(
+    SELECT...
+    ORDER BY total_revenue DESC  -- not allowed!
+)
+```
+**Lesson Learned:**
+ORDER BY never goes inside CTE — only in final SELECT! *(Repeated mistake — needs extra attention!)* ⚠️
+
+---
+
+### Mistake 15: Using Table Alias Outside CTE
+**Query Context:** Q15
+
+**What Happened:**
+```sql
+SELECT c.customer_unique_id  -- c. doesn't exist in final SELECT!
+FROM customer_segment
+```
+**Lesson Learned:**
+After CTE, you're selecting from the **CTE name** — original table aliases no longer exist!
+
+---
+
+### Mistake 16: Missing Comma Between Two CTEs
+**Query Context:** Q15
+
+**What Happened:**
+```sql
+WITH orders_per_customer AS
+(...)
+customer_segment AS  -- missing comma!
+```
+**The Fix:**
+```sql
+WITH orders_per_customer AS
+(...),  -- comma here!
+customer_segment AS
+```
+**Lesson Learned:**
+Multiple CTEs must be separated by commas — just like columns in SELECT!
+
+---
+
+## PROUD MOMENTS
+
+✅ Fixed data type error independently during import
+✅ Spotted the `product_lenght_cm` typo in the dataset
+✅ Figured out 4-table JOIN after 1 hour of trying
+✅ Created the "bus journey" analogy for JOINs
+✅ Discovered data quality issues through reconciliation
+✅ Spotted NULL category at Rank 20 independently (Q13)
+✅ Identified data quality issue without being told!
+✅ Understood WHERE vs SELECT placement for ISNULL()
+✅ Spotted Children's Fashion as untapped business opportunity
+✅ Cross-validated dataset end date across Q10, Q12 and Q14
+✅ This is called TRIANGULATION in data analysis!
+✅ Caught missing COUNT in Q15 independently
+✅ Connected customer_id vs customer_unique_id correctly
+✅ Wrote first ever chained CTEs in Q15
+✅ Completed entire SQL Portfolio Project with 15 questions across 3 levels! 🏁
