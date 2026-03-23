@@ -328,3 +328,76 @@ Result:
 -- with most months generating similar revenue (~37.62). However, occasional
 -- spikes in certain months indicate periods of higher sales activity,
 -- while a few months show lower revenue, suggesting variability in customer purchases.
+
+/* =========================================================
+   SECTION 11: Sales Representative Performance
+
+   Business Question:
+   Which sales representatives generate the highest revenue
+   for the Chinook music store?
+   ========================================================= */
+   use chinook;
+
+   select e.employeeId, e.Firstname,e.lastname, sum(i.total) as TotalRevenue
+   from Employee e
+   join Customer c
+   on e.EmployeeId=c.SupportRepId
+   join invoice i
+   on c.CustomerID=i.CustomerID
+   group by e.employeeId, e.Firstname,e.lastname
+   order by TotalRevenue desc;
+
+   /* Result:
+   3	Jane	Peacock	833.04
+    4	Margaret	Park	775.40
+    5	Steve	Johnson	720.16 */
+
+   -- Insight:
+-- Jane Peacock leads in revenue generation among sales representatives,
+-- indicating strong customer performance, followed by Margaret Park
+-- and Steve Johnson.
+
+/* =========================================================
+   SECTION 12: Top Selling Tracks Overall
+
+   Business Question:
+   Which tracks are purchased the most overall
+   in the Chinook music store?
+   ========================================================= */
+
+   SELECT top 10 t.Name AS TrackName,
+       SUM(il.Quantity) AS TotalSold
+FROM Track t
+JOIN InvoiceLine il
+    ON t.TrackId = il.TrackId
+GROUP BY t.Name
+ORDER BY TotalSold DESC;
+
+-- Insight:
+-- Multiple tracks share the highest purchase count (4), indicating no single
+-- dominant track. Customer purchases are distributed across several popular
+-- songs, suggesting diverse listening preferences.
+
+-- Note:
+-- Multiple tracks have equal top sales, which could also be analyzed using
+-- RANK() instead of TOP to include all tied results.
+
+SELECT TrackName, TotalSold
+FROM (
+    SELECT t.Name AS TrackName,
+           SUM(il.Quantity) AS TotalSold,
+           RANK() OVER (
+               ORDER BY SUM(il.Quantity) DESC
+           ) AS rnk
+    FROM Track t
+    JOIN InvoiceLine il
+        ON t.TrackId = il.TrackId
+    GROUP BY t.Name
+) t
+WHERE rnk = 1;
+
+-- Insight:
+-- Multiple tracks share the highest purchase count, indicating no single
+-- dominant track. Using RANK() ensures all top-performing tracks are included,
+-- reflecting equal customer preference among them.
+
