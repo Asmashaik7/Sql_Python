@@ -330,3 +330,176 @@ Break problems into steps.
 
 Lesson:
 Most SQL errors are small typos — read carefully.
+
+---
+21. Grouping at wrong granularity
+    Mistake: Grouped by full date instead of month.
+
+Example mistake:
+GROUP BY InvoiceDate
+
+Why it's wrong:
+This groups data at daily level instead of monthly level, which does not match the business question.
+
+Correct approach:
+GROUP BY YEAR(InvoiceDate), MONTH(InvoiceDate)
+
+Lesson:
+Always match the level of aggregation (day, month, year) with the business requirement.
+
+---
+
+22. Selecting columns not in GROUP BY
+    Mistake: Selected InvoiceDate without grouping or aggregating it.
+
+Example mistake:
+SELECT InvoiceDate, SUM(Total)
+
+Why it's wrong:
+SQL requires that all selected columns must either be included in GROUP BY or be aggregated.
+
+Correct approach:
+Remove InvoiceDate or include it in GROUP BY (depending on requirement).
+
+Lesson:
+Every column in SELECT must be:
+✔ part of GROUP BY
+OR
+✔ inside an aggregate function (SUM, COUNT, etc.)
+
+---
+
+23. Grouping at wrong granularity (time analysis)
+    Mistake: Grouped by full date instead of month.
+
+Example mistake:
+GROUP BY InvoiceDate
+
+Why it's wrong:
+This groups data at daily level instead of monthly level.
+
+Correct approach:
+GROUP BY YEAR(InvoiceDate), MONTH(InvoiceDate)
+
+Lesson:
+Always match aggregation level with business question (day vs month vs year).
+
+---
+
+24. Selecting columns not in GROUP BY
+    Mistake: Selected InvoiceDate without grouping or aggregating it.
+
+Why it's wrong:
+SQL requires all selected columns to be grouped or aggregated.
+
+Lesson:
+Every column in SELECT must be:
+✔ in GROUP BY
+OR
+✔ inside an aggregate function
+
+---
+
+25. Using TOP instead of handling ties
+    Mistake: Used TOP 5 when multiple rows had equal values.
+
+Why it's wrong:
+TOP may exclude valid tied results.
+
+Correct approach:
+Use RANK() when ties matter.
+
+Lesson:
+TOP → arbitrary cutoff
+RANK → includes ties
+
+---
+
+26. Not recognizing when to use RANK vs ROW_NUMBER
+    Mistake: Used ROW_NUMBER() even when ties existed.
+
+Difference:
+ROW_NUMBER() → forces unique rank
+RANK() → allows ties
+
+Lesson:
+Use:
+ROW_NUMBER → when only one result needed
+RANK → when multiple top results possible
+
+---
+
+27. Overusing SELECT * in final output
+    Mistake: Used SELECT * in final query output.
+
+Why it's not ideal:
+Returns unnecessary columns (like rn).
+
+Better approach:
+Select only required columns.
+
+Lesson:
+SELECT * → testing
+Explicit columns → final output
+
+---
+
+28. Not identifying correct analysis pattern
+    Mistake: Initially confused between:
+
+* aggregation problem
+* ranking problem
+
+Lesson:
+Recognize patterns:
+
+GROUP BY → summary
+WINDOW FUNCTION → top per group
+SIMPLE SUM → overall totals
+
+---
+
+29. Not verifying result meaning
+    Mistake: Ran query but unsure what output represents.
+
+Lesson:
+Always ask:
+“What does each row represent?”
+
+---
+
+30. Ignoring ties in business interpretation
+    Mistake: Initially treated top tracks as unique winners.
+
+Correction:
+Multiple tracks had equal top sales.
+
+Lesson:
+Always check for equal values in results.
+
+---
+
+31. Not aligning SQL with business question
+    Mistake: Focused on writing query instead of interpreting requirement.
+
+Lesson:
+Always convert question into:
+
+Group → Metric → Output
+
+Example:
+Top track per genre →
+Group = Genre
+Metric = Quantity
+Output = Track
+
+---
+
+32. Not simplifying final queries
+    Mistake: Writing complex queries without refinement.
+
+Lesson:
+After solving:
+✔ simplify
+✔ clean aliases
+✔ improve readability
