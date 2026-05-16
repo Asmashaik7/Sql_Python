@@ -1,0 +1,83 @@
+--Top, offset,Fetch
+/* TOP IS USED TO RETURN FIXED NUMBER OR PERCENTAGE OF ROWS FROM A TABLE
+
+1000*15/100=150
+
+--we can retrive percentage also using TOP. 
+--TOP 15% ROWS in the total table*/
+
+SELECT
+	TOP 1 *
+FROM PRODUCTS_1
+ORDER BY SALES DESC
+
+/* Result:
+PID	PNAME	QUANTITY	COST	SALES
+102	CHARGER	5	500	600 */
+--we got all columns as we wrote *
+=======================================
+
+SELECT
+	TOP 1 PERCENT PNAME
+FROM PRODUCTS_1
+ORDER BY SALES DESC
+
+/* result: 
+PNAME
+CHARGER
+--we got PNAME as we wrote PNAME in select 
+*/
+ 
+--ASC --LOWEST
+--DESC - HIGHEST
+
+--ETL -SSIS
+
+===================================================================
+
+--OFFSET
+--IT IS USED TO SKIP A SPECIFIC NUMBER ROWS
+--NOTE: MUST BE USED WITH ORDER BY
+
+SELECT
+  *
+FROM PRODUCTS
+/*
+PID	PNAME	QUANTITY	COST	SALES
+201	PC	5	400	600
+202	CHARGER	5	500	600
+203	MONITOR	3	250	300
+203	MONITOR	3	250	300*/
+
+=============
+SELECT
+  *
+FROM PRODUCTS
+--WHERE PID<>201
+
+ORDER BY PID
+OFFSET 2 ROWS
+/*Result:
+PID	PNAME	QUANTITY	COST	SALES
+203	MONITOR	3	250	300
+203	MONITOR	3	250	300
+
+===============================================
+
+FETCH -- IT IS USED WITH OFFSET TO LIMIT NUMBER OF ROWS AFTER SKIPPING*/
+
+SELECT
+  *
+FROM PRODUCTS
+
+ORDER BY PID
+OFFSET 3 ROWS
+FETCH NEXT 4 ROWS ONLY
+
+--SKIP 3 ROWS
+--THEN RETURN NEXT 4 ROWS
+
+
+TOP								OFFSET							FETCH
+LIMIT ROWS			            SKIP ROWS                       LIMIT AFTER SKIP
+ORDER BY-OPTIONAL               ORDER BY -Mandatory             ORDER BY -Mandatory

@@ -1,0 +1,13 @@
+Set Operators   --- Set Operators are used to combine the results of two or more Select queries into a single result set
+-----------------------
+	1.Union		--> It combines results from multiple queries and removes duplicates(Unique records only)
+	2.Union All	--> It is used to Combine the results and keeps duplicates (It includes duplicates and faster than UNION)
+	3.Intersect	--> It is used to get the Matching Records or common rows between two queries( A ^ B)
+	4.Except	--> It is used to get rows from the first query that are not present in the second query A - B
+
+	Rules
+	----------
+	1.Number of Columns in all queries must be the same
+	2.Position of the Columns in all queries has to be same
+	3.Datatypes must be compatible
+	4.Order By can be used only at the final query

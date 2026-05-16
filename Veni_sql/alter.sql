@@ -25,7 +25,10 @@ ALTER TABLE EMPLOYEES ADD location VARCHAR(30),job_location varchar(20)
 
 -- DROP
 -- HOW TO REMOVE THE COLUMNS FROM AN EXISTING TABLE
-ALTER TABLE EMPLOYEES DROP COLUMN JOB
+ALTER TABLE EMPLOYEES DROP COLUMN JOB_LOCATION
+
+SELECT * FROM EMPLOYEES
+--We get output of only headers as we have no data in the employees table. we havent inserted data still.
 
 DROP TABLE EMPLOYEES
 
