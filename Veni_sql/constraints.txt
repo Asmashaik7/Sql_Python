@@ -1,0 +1,101 @@
+--Constraints
+						------------
+---Report -->
+
+--sales---> which sales person sold highest quantity/ sales value/region wise   --Sales table
+-----------------------------------------------------------------------------  --sales person table
+                                                                              -- product table
+                                                                               -- region table
+
+SELECT
+      INVOICENO,
+      SALESAMOUNT,
+      SP.NAME AS SALESPERSON_NAME,
+      R.NAME AS REGION_NAME,
+      P.QUANTITY
+FROM SALES_TBL AS S
+JOIN SALESPERSON_TBL AS SP
+ON S.salespersonID=SP.salespersonID
+JOIN REGION_TBL AS R
+ON S.RegionID=R.RegionID
+JOIN PRODUCT_TBL AS P
+ON S.ProductID=P.ProductID
+
+/*
+InvoiceNo salespersonID ProductID RegionID Salesamount
+110       1             123       11        50000
+112       2             123       12        30000
+113       1             222       11        80000
+114       1             123       12        35000
+
+--------------------
+
+salespersonid   name   age  address
+1               xyz    40   hdjdjhd
+2               xxx    45   
+3               zzz    25   djdkkj
+
+---------------------------------
+
+productid   prodname  size color quantity
+111	    colgate   100g  red   100
+123         colgate   150g  blue  500
+222         sensodine  50g  white  50
+555         closeup   200g  red   200
+----------------------------------
+RegionID   name  state country
+11         North       AP     India
+12         South       AP     India
+13         East        AP     India
+14         West        AP     India
+  
+
+--select -- drl
+--max
+--order by desc/asc
+--group by
+-- *
+-- top percentage
+--having
+--where
+--joins
+-- AS
+------------------------------------------------------------------------
+DATA TYPES
+---SET OPERATORS RULES
+
+A Constraint is a rule applied to a column or table to enforce data integrity and accuracy.
+
+--- Data validation
+customer data
+--name,id,address,location,phone number,email,age,gender
+--phone number 10 digitis -- CHECK CONSTRAINT
+
+  jfkdjkfjjfd
+
+ 1)NOT NULL 			DISALLOW NULL VALUES
+ 2)PRIMARY KEY			UNIQUE+NOT NULL	 - ***NOT EVEN SINGLE TIME
+ 3)UNIQUE			UNIQUE VALUES    ***ONE TIME IT ALLOWS NULL VALUE   
+ 4)FOREIGN KEY                  MAINTAIN RELATIONSHIPS
+ 5)CHECK                        VALIDATE CONDITIONS                  
+ 6)DEFAULT                      ASSIGN DEFAULT VALUE
+
+DIFFERENCE BETWEEN PRIKARY KEY AND UNIQUE
+
+ID NAME
+1  A     
+2  B
+3  C
+4  XXX
+5  XXX  
+6
+
+/*
+
+CREATE TABLE EMPLOYEES
+ (AGE INT CHECK(AGE>=10)
+ )
+CREATE TABLE ORDERS
+(
+ ORDERID INT,ORDERDATE DATE DEFAULT GETDATE()
+ )
