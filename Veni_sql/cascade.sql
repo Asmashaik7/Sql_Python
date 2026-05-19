@@ -1,0 +1,106 @@
+
+/* TYPES OF ACTIONS(ON DELETE / ON UPDATE)
+
+ FOREIGN KEYS SUPPORT ACTIONS WHEN PARENT DATA CHANGES
+ ----------------------------------------------------
+
+ CASCADE  -->  AUTOMATICALLY DELETES/UPDATES CHILD ROWS
+ SYNTAX: FOREIGN KEY(CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID)
+ ON DELETE CASCADE */
+
+ -- ALTER TABLE ORDER ADD CONSTRAINT FK_CUSTOMER
+ -- ALTER TABLE ORDERS DROP CONSTRATINT FK_CUSTOMER
+
+
+--PARENT TABLE
+CREATE TABLE CUSTOMER_CASCADE (
+    CUSTOMERID INT PRIMARY KEY,
+    CUSTOMERNAME VARCHAR(50)
+);
+
+select * from CUSTOMER_CASCADE
+
+
+-- CHILD TABLE
+CREATE TABLE ORDERS_CASCADE (
+    ORDERID INT PRIMARY KEY,
+    PRODUCTNAME VARCHAR(50),
+    CUSTOMERID INT,
+
+    CONSTRAINT FK_CUSTOMER_CASCADE
+    FOREIGN KEY (CUSTOMERID)
+    REFERENCES CUSTOMER_CASCADE(CUSTOMERID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+select * from ORDERS_CASCADE
+
+INSERT INTO CUSTOMER_CASCADE VALUES
+(1, 'Rahul'),
+(2, 'Priya'),
+(3, 'Arjun');
+
+INSERT INTO ORDERS_CASCADE VALUES
+(101, 'Laptop', 1),
+(102, 'Phone', 1),
+(103, 'Watch', 2),
+(104, 'Tablet', 3);
+
+select * from CUSTOMER_CASCADE
+select * from ORDERS_CASCADE
+
+-- We are deleting customerid 1 in parent table.
+DELETE FROM CUSTOMER_CASCADE
+WHERE CUSTOMERID = 1;
+-- Observe that ,the data related to the customerid 1 is deleted in the child table also.
+
+
+------------------------------
+--practice on UPDAte
+UPDATE CUSTOMER_CASCADE
+SET CUSTOMERID = 20
+WHERE CUSTOMERID = 2;
+
+select * from CUSTOMER_CASCADE
+select * from ORDERS_CASCADE
+
+--Observed that 2 is updated into 20 in child table also.
+
+================================================================================
+--Drop Foreign Key
+-- if we remove the FK constraint then no changes in parent will effect the child
+
+ALTER TABLE ORDERS_CASCADE
+DROP CONSTRAINT FK_CUSTOMER_CASCADE;
+
+/* ERROR: Msg 3728, Level 16, State 1, Line 74
+'FK_CUSTOMER_CASCADE' is not a constraint.
+Msg 3727, Level 16, State 0, Line 74
+Could not drop constraint. See previous errors.*/
+
+EXEC sp_help 'ORDERS_CASCADE';
+
+DROP TABLE IF EXISTS ORDERS_CASCADE;
+DROP TABLE IF EXISTS CUSTOMER_CASCADE;
+
+CREATE TABLE CUSTOMER_CASCADE (
+    CUSTOMERID INT PRIMARY KEY,
+    CUSTOMERNAME VARCHAR(50)
+);
+
+CREATE TABLE ORDERS_CASCADE (
+    ORDERID INT PRIMARY KEY,
+    PRODUCTNAME VARCHAR(50),
+    CUSTOMERID INT,
+
+    CONSTRAINT FK_CUSTOMER_CASCADE
+    FOREIGN KEY (CUSTOMERID)
+    REFERENCES CUSTOMER_CASCADE(CUSTOMERID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+--now the FK constarint is created. earlier its not created and got error.
+
+EXEC sp_help 'ORDERS_CASCADE'
+
