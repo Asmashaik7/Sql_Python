@@ -1,0 +1,198 @@
+Can you drop foreign key constraint -yes					
+can you drop a parent table if there is a FK constraint	-- no
+
+If I want to drop a parent table--- 1)you have to drop FK constraint first
+                                    2)drop table parenttable
+
+second option:1)drop child table
+              2) drop parent table
+
+note: parent table cannot be dropped if it is referenced by a FK
+--Drop FK constraint
+--drop child table
+--drop parent table
+
+
+Operators:
+---------
+Operators are symbols or keywords used to perform operations on data values.
+
+
+1.Arithmetic Operators  -- mathematical calculations 
+2.Comparision Operators -- compare values
+3.Logical Operators     -- To combine multiple conditions 
+                           AND/OR/NOT
+AND - All conditions must be true maths>=34 and science>=35 and phy>=35
+                           OR - AT LEAST ONE CONDITION TRUE B.COM BSC BTECH
+                           NOT - Negates condition
+4.Set Operators
+5.Special Operators
+
+	1.Arithmetic Operators
+	--------------------------------
+	1.Add  --> It is used to Add one Column values with another Column
+
+	2.Sub  --> It is used to get the Difference b/w two values
+
+	3.Mul  --> It is used to get the Product of two values
+
+	4.Div  --> It is used to Divide one value with another value
+
+	5.Modules  --> It is used to get the Remainder as an O/P
+
+	2.Comparision Operators
+	----------------------------------
+	1. =		Equals to
+
+	2. <>		Not Equals to
+
+	3. >		Greater than
+
+	4. <		Less than
+
+	5. >=		Greater than or Equals to
+
+	6. <=		Less than or Equals to
+
+
+3.Logical Operators
+---------------------------
+	1.And
+	2.Or
+	3.Not
+
+	1.And
+	----------
+	If both the Conditions are True then only the O/P is True
+	If any one Condition is False then the O/P is also False
+
+	A	B	O/P
+	-------------------
+	0	0	0
+	1	0	0
+	0	1	0
+	1	1	1
+
+	2.Or
+	--------
+	If any one Condition is True then the O/P is also True
+	If both the Conditions are False the the O/P is also False
+
+	A	B	O/P
+	--------------------
+	0	0	0
+	1	0	1
+	0	1	1
+	1	1	1
+
+	3.Not
+	----------
+	If the I/P is True then the O/P is False
+	If the I/P is False then the O/P is True
+
+	A	O/P
+	--------------
+	1	0
+	0	1
+
+5.Special Operators
+-------------------
+	1.In     -- matches list of values  id dname location
+                                            1  finance  delhi
+                                            2  HR       hyd
+                                            3  Admin    hyd
+                                            4  IT       Chennai
+                                        what are the departments existed in hyd and delhi?
+                                        select                  
+                                         dname
+                                        from department
+                                        where location in ('delhi','hyd')
+       2) between -- used to filter a range
+              SELECT *
+              FROM EMPLOYEES
+              WHERE SALARY BETWEEN 30000 AND 60000
+
+       3) IS NULL  -- Check for NULL values
+         				    id dname    location
+                                            1  finance  delhi
+                                            2  HR       
+                                            3  Admin    hyd
+                                            4  IT   
+              SELECT
+                 *
+              FROM DEPARTMENT 
+              WHERE LOCATION IS NULL   
+              
+ 	      SELECT
+                 *
+              FROM DEPARTMENT 
+              WHERE LOCATION IS NOT NULL
+
+       4)EXISTS - CHECKS IF SUBQUERY RETURNS DATA  
+
+ 					 DEPTid dname    location
+                                            1   finance  delhi
+                                            2   HR       
+                                            3   Admin    hyd
+                                            4   IT   
+                       
+EMPNO ENAME SALARY DEPTID
+101   XXX    500   1
+102   YYY    5000  2
+103   ZZZ    1000  1
+
+              SELECT
+                 DNAME
+              FROM DEPARTMENT AS D
+              WHERE EXISTS (
+                    SELECT EMPID FROM EMPLOYEE E WHERE E.DEPTID=D.DEPTID --
+                   )
+                     
+
+nOTE: TO CHECK RELATED DATA PRESENCE BETWEEN TABLES 
+
+LIKE:   TO SEARCH FOR A PATTERN IN A COLUMN
+ %  : Matches any number of characters
+ -  : Matches a single character
+[]  : Matches any character inside brackets
+[^] : Matches characters not inside brackets
+
+CREATE TABLE EMPLOYEES(ENUM INT,ENAME VARCHAR(20),JOB VARCHAR(20),
+HIREDATE DATE,ESALARY INT,DNO INT)
+
+INSERT INTO EMPLOYEES VALUES(101,'KRISHNA','TRAINE','2020-02-12',50000,10)
+INSERT INTO EMPLOYEES VALUES(102,'SRI','DEV','2020-02-12',20000,10)
+INSERT INTO EMPLOYEES VALUES(103,'SHEWAG','PRESIDENT','2005-02-12',60000,10)
+INSERT INTO EMPLOYEES VALUES(104,'KOHLI','DEV','2020-03-12',40000,10)
+INSERT INTO EMPLOYEES VALUES(105,'WARNER','SLAESMAN','2021-02-12',25000,20)
+INSERT INTO EMPLOYEES VALUES(106,'SMITH','CLERK','2021-10-12',35000,20)
+INSERT INTO EMPLOYEES VALUES(107,'VENI','ANALYST','2021-02-12',25000,20)
+INSERT INTO EMPLOYEES VALUES(108,'STARC','SLAESMAN','2021-02-12',25000,20)
+INSERT INTO EMPLOYEES VALUES(109,'FINCH','CLERK','2021-02-12',12000,30)
+INSERT INTO EMPLOYEES VALUES(110,'PANDYA','ANALYST','2000-02-12',25000,30)
+INSERT INTO EMPLOYEES VALUES(111,'MAXWELL','CLERK','2000-02-12',10000,30)
+
+SELECT * FROM EMPLOYEES
+
+-- LIKE
+
+--1) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME STARTS WITH 'S'
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE 'S%'
+
+--2) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME ENDS WITH 'H'
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE '%H'
+
+--3) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME HAS 'AR'
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE '%AR%'
+
+--4) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME HAS 'A' IN THE SECOND POSITION
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE '_A%'
+
+--5) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME STARTS WITH 'S' AND HAS ATLEAST TWO CHARACTERS
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE 'S__%'
+
+--6) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME STARTS WITH 'S' AND HAS ATLEAST FOUR CHARACTERS
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE 'S__%'
+
+--7) WRITE A QUERY TO GET EMP DETAILS WHOSE NAME STARTS WITH 'S' AND ENDS WITH 'H'
+SELECT * FROM EMPLOYEES WHERE ENAME LIKE 'S%H'

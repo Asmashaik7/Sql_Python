@@ -1,0 +1,139 @@
+-- For practicing IN, BETWEEN, IS NULL, EXISTS, you should create 2 related tables:DEPARTMENT, EMPLOYEE
+
+CREATE TABLE DEPARTMENT
+(
+    DEPTID INT,
+    DNAME VARCHAR(20),
+    LOCATION VARCHAR(20)
+);
+
+CREATE TABLE EMPLOYEE
+(
+    EMPNO INT,
+    ENAME VARCHAR(20),
+    SALARY INT,
+    DEPTID INT
+);
+--------------
+-- INserting into Department table
+INSERT INTO DEPARTMENT VALUES (1, 'FINANCE', 'DELHI');
+
+INSERT INTO DEPARTMENT VALUES (2, 'HR', NULL);
+
+INSERT INTO DEPARTMENT VALUES (3, 'ADMIN', 'HYD');
+
+INSERT INTO DEPARTMENT VALUES (4, 'IT', NULL);
+
+INSERT INTO DEPARTMENT VALUES (5, 'SALES', 'CHENNAI');
+
+INSERT INTO DEPARTMENT VALUES (6, 'MARKETING', 'MUMBAI');
+
+INSERT INTO DEPARTMENT VALUES (7, 'SUPPORT', 'HYD');
+
+INSERT INTO DEPARTMENT VALUES (8, 'SECURITY', 'DELHI');
+
+--inserting into Employee table
+INSERT INTO EMPLOYEE VALUES (101, 'AAA', 500, 1);
+
+INSERT INTO EMPLOYEE VALUES (102, 'BBB', 5000, 2);
+
+INSERT INTO EMPLOYEE VALUES (103, 'CCC', 1000, 1);
+
+INSERT INTO EMPLOYEE VALUES (104, 'DDD', 3500, 3);
+
+INSERT INTO EMPLOYEE VALUES (105, 'EEE', 7000, 5);
+
+INSERT INTO EMPLOYEE VALUES (106, 'FFF', 2500, 3);
+
+INSERT INTO EMPLOYEE VALUES (107, 'GGG', 4500, 6);
+
+INSERT INTO EMPLOYEE VALUES (108, 'HHH', 1500, 7);
+
+INSERT INTO EMPLOYEE VALUES (109, 'III', 9000, 5);
+
+INSERT INTO EMPLOYEE VALUES (110, 'JJJ', 2000, 8);
+
+select * from EMPLOYEE
+-----------------------------------------------------
+--1. Departments located in HYD or DELHI:
+
+SELECT DNAME
+FROM DEPARTMENT
+WHERE LOCATION IN ('HYD', 'DELHI');
+------------------------------------------------------
+--2. Employees whose salary is between 2000 and 5000:
+
+SELECT *
+FROM EMPLOYEE
+WHERE SALARY BETWEEN 2000 AND 5000;
+
+/* Result:
+EMPNO	ENAME	SALARY	DEPTID
+102	BBB	5000	2
+104	DDD	3500	3
+106	FFF	2500	3
+107	GGG	4500	6
+110	JJJ	2000	8*/
+----------------------------------------------------------
+--3. Departments with NULL locations:
+
+SELECT *
+FROM DEPARTMENT
+WHERE LOCATION IS NULL;
+
+/*Result:
+DEPTID	DNAME	LOCATION
+2	HR	NULL
+4	IT	NULL*/
+------------------------------------------------------------
+SELECT *
+FROM DEPARTMENT
+WHERE LOCATION IS NOT NULL;
+
+/*Result:
+DEPTID	DNAME	LOCATION
+1	FINANCE	DELHI
+3	ADMIN	HYD
+5	SALES	CHENNAI
+6	MARKETING	MUMBAI
+7	SUPPORT	HYD
+8	SECURITY	DELHI*/
+
+------------------------------------------------------------
+
+--Departments having employees:
+
+SELECT DNAME
+FROM DEPARTMENT D
+WHERE EXISTS
+(
+    SELECT *
+    FROM EMPLOYEE E
+    WHERE E.DEPTID = D.DEPTID
+);
+/*Result:
+DNAME
+FINANCE
+HR
+ADMIN
+SALES
+MARKETING
+SUPPORT
+SECURITY*/
+
+---------------------------------------
+--Departments with no employees:
+
+SELECT DNAME
+FROM DEPARTMENT D
+WHERE NOT EXISTS
+(
+    SELECT *
+    FROM EMPLOYEE E
+    WHERE E.DEPTID = D.DEPTID
+);
+
+/*Result:
+DNAME
+IT
+------------------------------------------

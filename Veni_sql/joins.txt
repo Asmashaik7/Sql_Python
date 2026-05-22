@@ -1,0 +1,189 @@
+Joins
+								--------
+	Joins are used to Retrieve the Data from more than one Tables based on the values under the Common Columns b/w the two tables
+
+	Rules
+	----------
+1)There should be a logical relationship(common column) between two tables, even if column names differ.
+2)The values in those columns should match logically for rows to be returned
+3)the data types of the columns should be the same or compatible
+4)A primary key - foreign key relationship is recommended for data integrity but not mandatory
+
+
+	Types of Joins
+	-----------------------
+	1.Inner Join  --> It is used to get the Matching Records b/w the two tables based on the values under the Common Columns  -- A ^ B
+
+	2.Left Outer Join  --> (Inner Join) + Non-Matching Records from the Left Side Table
+
+	3.Right Outer Join  --> (Inner Join) + Non-Matching Records from the Right Side Table
+
+	4.Full Outer Join  --> (Inner Join) + Non-Matching Records from the Left Side Table + Righ Side Table
+
+	5.Cross Join  --> Product of Two Tables	* (No need to have the Common Column b/w the two tables)
+
+	6.Self Join  --> Joining a Table by itself is known as "Self Join"		*(Alias Names are Mandatory)
+
+
+	1.Inner Join  --> It is used to get the Matching Records b/w the two tables
+	-------------------------
+															1+1+1
+			  Emp						Dept					
+	----------------------------------------		--------------------------------
+	Eno	Ename	Salary	Dno		Dno	Dname	Location
+	----------------------------------------		--------------------------------
+	101	Warner	12000	10		10	Admin	Hyd
+	102	Smith	14000	20		20	Sales		Chennai
+	103	Scoot	16000	10		30	Dev		Bang
+	104	Finch	18000	50		40	Clerk		Puna
+	105	Starch	20000	60
+
+	Output
+	---------------
+	------------------------------------------------------------------------
+	Eno	Ename	Salary	Dno	Dno	Dname	Location
+	------------------------------------------------------------------------
+	101	Warner	12000	10	10	Admin	Hyd
+	102	Smith	14000	20	20	Sales		Chennai
+	103	Scoot	16000	10	10	Admin	Hyd
+
+
+	2.Left Outer Join  --> (Inner Join) + Non-Matching Records from the Left Side Table
+	--------------------------------------------
+
+			  Emp						Dept					
+	----------------------------------------		--------------------------------
+	Eno	Ename	Salary	Dno		Dno	Dname	Location
+	----------------------------------------		--------------------------------
+	101	Warner	12000	10		10	Admin	Hyd
+	102	Smith	14000	20		20	Sales		Chennai
+	103	Scoot	16000	10		30	Dev		Bang
+	104	Finch	18000	50		40	Clerk		Puna
+	105	Starch	20000	60
+
+	Output
+	---------------
+	------------------------------------------------------------------------
+	Eno	Ename	Salary	Dno	Dno	Dname	Location
+	------------------------------------------------------------------------
+	101	Warner	12000	10	10	Admin	Hyd
+	102	Smith	14000	20	20	Sales		Chennai
+	103	Scoot	16000	10	10	Admin	Hyd
+
+	104	Finch	18000	50	Null	Null		Null
+	105	Starch	20000	60	Null	Null		Null
+
+	3.Right Outer Join  --> (Inner Join) + Non-Matching Records from the Right Side Table
+	-------------------------------------------------
+	
+			  Emp						Dept					
+	----------------------------------------		--------------------------------
+	Eno	Ename	Salary	Dno		Dno	Dname	Location
+	----------------------------------------		--------------------------------
+	101	Warner	12000	10		10	Admin	Hyd
+	102	Smith	14000	20		20	Sales		Chennai
+	103	Scoot	16000	10		30	Dev		Bang
+	104	Finch	18000	50		40	Clerk		Puna
+	105	Starch	20000	60
+
+	Output
+	---------------
+	------------------------------------------------------------------------
+	Eno	Ename	Salary	Dno	Dno	Dname	Location
+	------------------------------------------------------------------------
+	101	Warner	12000	10	10	Admin	Hyd
+	102	Smith	14000	20	20	Sales		Chennai
+	103	Scoot	16000	10	10	Admin	Hyd
+
+	Null	Null		Null		Null	30	Dev		Bang
+	Null	Null		Null		Null	40	Clerk		Pune
+4.Full Outer Join  --> (Inner Join) + Non-Matching Records from the Left Side Table + Righ Side Table
+	-------------------------------------
+
+			  Emp						Dept					
+	----------------------------------------		--------------------------------
+	Eno	Ename	Salary	Dno		Dno	Dname	Location
+	----------------------------------------		--------------------------------
+	101	Warner	12000	10		10	Admin	Hyd
+	102	Smith	14000	20		20	Sales		Chennai
+	103	Scoot	16000	10		30	Dev		Bang
+	104	Finch	18000	50		40	Clerk		Puna
+	105	Starch	20000	60
+
+	Output
+	---------------
+	------------------------------------------------------------------------
+	Eno	Ename	Salary	Dno	Dno	Dname	Location
+	------------------------------------------------------------------------
+	101	Warner	12000	10	10	Admin	Hyd
+	102	Smith	14000	20	20	Sales		Chennai
+	103	Scoot	16000	10	10	Admin	Hyd
+
+	104	Finch	18000	50	Null	Null		Null
+	105	Starch	20000	60	Null	Null		Null
+
+	Null	Null		Null		Null	30	Dev		Bang
+	Null	Null		Null		Null	40	Clerk		Puna
+
+	5.Cross Join  --> Product of Two Tables	* (No need to have the Common Column b/w the two tables)
+	----------------------------------------------------
+
+			  Emp						Dept					
+	----------------------------------------		--------------------------------
+	Eno	Ename	Salary	Dno		Dno	Dname	Location
+	----------------------------------------		--------------------------------
+	101	Warner	12000	10		10	Admin	Hyd
+	102	Smith	14000	20		20	Finance		Chennai
+	103	Scoot	16000	10		30	HR		Bang
+	104	Finch	18000	50		40	IT		Pune
+	105	Starch	20000	60
+        
+Emp_details
+ID    dob   	address	     enumber
+1     17-10-81   lb nagar    101
+2     17-10-81   vansthalipur101
+
+SELECT
+	E.ENO,
+        E.ENAME,
+        ED.ADDRESS
+FROM EMP AS E
+INNER JOIN Emp_details AS ED
+ON E.ENO=ED.ENUMBER
+--- RETURNS ONLY MATCHING ROWS FROM THE TABLES
+
+
+	6.Self Join  --> Joing a Table by itself is known as "Self Join"		*(Alias Names are Mandatory)
+	---------------------------------------
+
+			  Emp											
+	-----------------------------------------------------		---------------------
+	Eno	Ename	Mgr-Id	Salary	Dno		Manager Names	
+	-----------------------------------------------------		---------------------	
+	101	Warner	101		12000	10		Warner	
+	102	Smith	101		14000	20		Warner	
+	103	Scoot	102		16000	10		Smith
+	104	Finch	103		18000	50		Scoot
+	105	Starch	101		20000	60		Warner
+
+INNER JOIN
+--RETRUNS ONLY MATCHING 
+--LEFT JOIN
+   -- ALL ROWS FROM LEFT TABLE
+   -- MATCHING ROWS FROM RIGHT TABLE
+   -- NON-MATCHING -->NULL
+
+-- RIGHT JOIN
+   -- ALL ROWS FROM RIGHT TABLE
+   -- MATCHING ROWS FROM LEFT TABLE
+   -- NON MATCHING ---> NULL
+
+FULL JOIN( COMBINES BOTH LEFT+ RIGHT JOIN)
+   --ALL ROWS FROM BOTH TABLES
+   --NON MATCHING ROWS --> NULL
+
+CROSS JOIN (A x B)
+-- RETURNS ALL COMBINATIONS OF ROWS(CARTESIAN PRODUCT)
+
+SELF JOIN
+ -- TABLE JOINS WITH ITSELF
