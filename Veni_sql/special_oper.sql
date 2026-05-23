@@ -132,6 +132,8 @@ WHERE NOT EXISTS
     FROM EMPLOYEE E
     WHERE E.DEPTID = D.DEPTID
 );
+--subqury checks Does any employee exist with same DEPTID?-No for IT, false.
+--outerquery takes false as input.and checks not exist condition. so, true. and show IT.
 
 /*Result:
 DNAME
