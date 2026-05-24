@@ -26,3 +26,6 @@ select '      hai '+ 'How are you'
 select trim('       hai   ') + ' How are you'
 
 
+
+
+
