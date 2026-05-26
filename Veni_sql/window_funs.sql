@@ -149,12 +149,23 @@ HANDLES TIES       NO					YES              YES
 SKIP Ranks          NO                   YES              NO  */
 
 
-
+-------------------------------------------------------
 --TOP 2 SALARIES PER DEPARTMENT
 select Department,
 salary,
-rank() over(partition by department order by salary desc)=2 as salary_orderwise
+rank() over(partition by department order by salary desc) as salary_orderwise
 from EMPLOYEES
+where salary_orderwise<=2
+
+--ERROR:Invalid column name 'salary_orderwise'.
+
+/*WHERE executes before window functions. rnk does not exist yet when WHERE runs.*/
+/*create rank in subquery then filter in outer query*/
+
+--execution steps:FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+--That’s why:
+/*aliases from SELECT cannot be used in WHERE
+aggregate functions cannot be used in WHERE*/
 
 
 SELECT Department, Salary
@@ -166,6 +177,7 @@ FROM (
     FROM EMPLOYEES
 ) t
 WHERE rnk <= 2;
+
 /*
 Department	Salary
 HR	450000
@@ -173,26 +185,47 @@ HR	400000
 IT	600000
 IT	600000
 */
-
-------------------------------
-
-SELECT Department, Salary
+--here i want to add rank as column to appear, so i kept rnk in select clause
+SELECT Department, Salary,rnk
 FROM (
     SELECT 
         Department,
         Salary,
-        RANK() OVER (
-            PARTITION BY Department
-            ORDER BY Salary DESC
-        ) AS rnk
+        RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS rnk
     FROM EMPLOYEES
 ) t
 WHERE rnk <= 2;
 
 /*
-Department	Salary
-HR	450000
-HR	400000
-IT	600000
-IT	600000
+Department	Salary	rnk
+HR	    450000	    1
+HR	    400000	    2
+IT	    600000	    1
+IT	    600000	    1
 */
+------------------------------
+/*Key Idea
+
+Window function columns like:
+
+RANK()
+ROW_NUMBER()
+DENSE_RANK()
+
+are created during the SELECT phase.
+
+But WHERE runs before SELECT.
+
+So:
+
+WHERE cannot directly access window-function aliases
+therefore we first create them in a subquery/CTE
+then filter in outer query
+
+PARTITION BY
+keeps all rows
+only creates logical partitions for calculations
+
+When we need ranking/calculations within groups while keeping all rows, we use window functions.
+
+If we need to filter based on those ranks, we first create the rank in a subquery/CTE, then use the outer query to filter or display results.*/
