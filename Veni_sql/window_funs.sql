@@ -210,9 +210,7 @@ Window function columns like:
 
 RANK()
 ROW_NUMBER()
-DENSE_RANK()
-
-are created during the SELECT phase.
+DENSE_RANK() are created during the SELECT phase.
 
 But WHERE runs before SELECT.
 
@@ -229,3 +227,17 @@ only creates logical partitions for calculations
 When we need ranking/calculations within groups while keeping all rows, we use window functions.
 
 If we need to filter based on those ranks, we first create the rank in a subquery/CTE, then use the outer query to filter or display results.*/
+
+----------------
+SELECT  EmpId,  
+EmpName,  
+Department,  
+Salary,  
+drn AS Ranking 
+FROM(
+        SELECT *,
+        DENSE_RANK() OVER  (PARTITION BY Department ORDER BY SALARY DESC) AS drn
+
+  FROM employees) t
+WHERE drn<=2;
+
