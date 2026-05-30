@@ -1,0 +1,40 @@
+Sub-Queries
+	----------------
+A subquery is a query within query.
+
+select djhdjhdjdjkds  --- main query/outer query
+(select djhdsjdjhd) - inner query
+
+
+-- get employee NAMES AND SALARY who earn more than the average salary
+
+average salary 50000
+
+SELECT
+    NAME,
+    SALARY
+FROM EMPLOYEES WHERE SALARY > ----- OUTER QUERY/MAIN QUERY
+     (select 
+	avg(salary)
+     from employees)   --- inner query
+
+
+-- INNER QUERY CALCULATING AVERAGE SALARY
+-- OUTER QUERY COMPARES EACH EMPLOYEES' SALARY WITH AVERAGE SALARY
+
+WHY DO WE NEED SUBQUERIES
+-------------------------
+1)FILTERING DATA BASED ON ANOTHER QUERY RESULT
+2)COMPARAING VALUES WITH AGGREAGETED DATA (SUM,AVG,MAX,MIN ETC.)
+3)CHECKING EXISTENCE OF DATA( EXISTS / NOT EXISTS)
+4)BREAKING COMPLEX QUERIES INTO SMALLER
+5)AVOID JOINS( IN SOME CASES FOR READABILITY)
+
+TYPES:
+1)SINGLE ROW SUBQUERY -- RETURN ONLY ONE ROW
+2)MULTIPLE ROW SUBQUERY - RETURNS MULTIPLE ROWS
+3)CORRELATED SUBQUERY   -- DEPENDS ON THE OUTER QUERY AND EXECUTES REPEATEDLY
+
+In a  given example of Multiple Row Subquery
+--Subquery returns multiple department names
+--Outer query or main query filters employees using IN

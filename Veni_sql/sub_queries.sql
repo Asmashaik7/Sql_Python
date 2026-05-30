@@ -1,5 +1,7 @@
 -- SUB QUERIES
+
 --TO get Name and salary of employees whose salaries >500000
+use SphoorthiDB
 select 
 * 
 from EMPLOYEES
@@ -11,6 +13,8 @@ EMPID	NAME	Department	Salary
 4	D	HR	400000
 5	F	HR	450000
 */
+update employees
+set salary=salary-5000-- we have this table during VARIABLE PRACTICE, thats y again updating it.
 ------------------------------------
 select 
 	Name,
@@ -25,7 +29,7 @@ B	600000
 C	600000
 */
 
--- here we dont need group by as in outer query we are not showing avg(), aggregate column
+-- here we dont need group by ,as in outer query we are not showing avg(), aggregate column
 ---------------------------------------
 select 
 	Name,
@@ -47,12 +51,14 @@ C	600000	600000
 select 
 	Name,
 	Salary,
-	avg(salary)
+	avg(salary) as AVG_SAL
 from 
 EMPLOYEES 
 	group by name,salary
-	having salary>
-		(select avg(salary) from EMPLOYEES)
+	having salary>=
+		(select avg(salary) from EMPLOYEES)--avg(salary) is 510000
+
+
 
 
 
