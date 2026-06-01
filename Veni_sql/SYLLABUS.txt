@@ -1,0 +1,23 @@
+1)Introduction
+2)Installation
+3)Data types
+4)Sub Languages
+5)Rename and Copy Data
+6)Operators
+7)Single row functions
+8)Aggregate Functions and Group By
+9)Ranking Functions
+10)Constraints
+11)Joins
+12)Views
+13)Sub Queries
+14)CTE and Duplicates
+15)Temporary Tables
+16)Variables
+17)Stored Procedures
+18)Functions
+19)Indexes
+20)Normalization
+21)Interview Q&A
+
+data modelling
