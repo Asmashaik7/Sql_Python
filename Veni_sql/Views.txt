@@ -1,0 +1,222 @@
+
+	Views
+	---------
+	A View is a virtual table that is created based on the result of a SQL query.
+
+        A)It does not store data itself(except special cases)
+        B)It displays data from one or more underlying tables.
+	
+	Ex:
+	Create view vw_emp
+	AS
+	SELECT EMPNO,ENAME,DEPARTMENT FROM EMPLOYEES
+	
+	Note: We can use it like a table
+             SELECT * FROM vw_emp
+       
+        Why Do We need Views:
+        ====================
+	1)Security-Restrict access to specific columns or rows(users cant see salary/sensitive data
+	2)Simplify Complex Joins - Hide complex joins or logic
+	3)Data Abstraction - Users don't need to know underlying table structure
+	4)Reusability - Write once, reuse multiple times
+	5)Consistency - Same logic used across reports/applications
+	
+        Ex:
+        CREATE VIEW vw_empdetails
+        AS
+        SELECT NAME,DEPARTMENT FROM EMPLOYEES
+        Note:Users can not see salary data
+
+        Ex:
+        CREATE VIEW VW_EMPDEPT
+        AS 
+        SELECT EMPID,ENAME,SAL FROM EMPLOYEE E
+	JOIN DEPARTMENT AS D
+	ON E.DNO=D.DNO
+
+	Types of Views:
+	==============
+	1)Simple View
+          a)Based on one table
+	  b)No aggregate functions, GROUP BY etc.
+	  c)Usually updatable
+
+        Ex:
+	CREATE VIEW VW_EMPLOYEE
+	AS
+	SELECT EMPID,ENAME,SALARY FROM EMPLOYEE
+
+        UPDATE VW_EMPLOYEE
+	SET SALARY=50000
+        WHERE EMPID=1
+     
+	2)Complex View
+	 a)Based on multiple tables
+	 b)May include: 
+			JOIN
+			GROUP BY
+			AGGREGATE FUNCTIONS(SUM,COUNT ETC.)
+	EX:
+	CREATE VIEW vw_Deptsal
+	AS
+	SELECT DNO,SUM(SALARY) AS TOTALSALRY FROM EMPLOYEES
+        GROUP BY DNO
+
+	3)Indexed View / Materialized view
+	 a)Physically stores data
+	 b)Improves performance
+	 c)Requires a unique clustered index
+	
+	Ex:
+	Create view vw_Totalsal
+	WITH SCHEMABINDING
+	AS
+	SELECT ENO,ENAME,SUM(SALARY) AS TOTALSAL
+	FROM EMPLOYEES
+	GROUP BY ENO,ENAME
+	
+	CREATE UNIQUE CLUSTERED INDEX IDX_TOTALSAL
+	ON VW_TOTALSAL(ENO)
+
+        Schemabinding:
+        =============
+        Schemabinding binds the view to the underlying base tables. It prevents changes to the  	table structure that would break the view.
+         -- Dropping a column
+         -- Altering a table structure
+
+
+	Note:1) A view can be updated if it is based on single table without Group by,DISTINCT, 	   	Aggregate functions,union,join(In most cases).
+             2) Views are not updatable if they contain Group BY,DISTINCT,Aggregate Functions,
+                Union,Joins(multiple base tables)
+	
+	
+--------------------------------------------------------------------------------------------
+CREATE DATABASE SQLVIEWS
+
+USE SQLVIEWS
+
+CREATE TABLE EMP(EID INT,ENAME VARCHAR(20),JOB VARCHAR(10),
+SAL MONEY,DNO INT)
+
+INSERT INTO EMP VALUES(101,'SUNIL','TRAINE',50000,10)
+INSERT INTO EMP VALUES(102,'SRI','DEV',20000,10)
+INSERT INTO EMP VALUES(103,'SHEWAG','PRESIDENT',60000,30)
+INSERT INTO EMP VALUES(104,'KOHLI','DEV',40000,20)
+INSERT INTO EMP VALUES(105,'WARNER','SALESMAN',25000,20)
+INSERT INTO EMP VALUES(106,'SMITH','CLERK',35000,20)
+INSERT INTO EMP VALUES(107,'VENKY','ANALIYST',25000,30)
+INSERT INTO EMP VALUES(108,'STARC','SALESMAN',25000,10)
+INSERT INTO EMP VALUES(109,'FINCH','CLERK',12000,10)
+INSERT INTO EMP VALUES(110,'PANDYA','ANALYTS',25000,30)
+INSERT INTO EMP VALUES(111,'MAXWELL','CLERK',10000,10)
+
+SELECT * FROM EMP
+
+CREATE TABLE DEPT(DNO INT,DNAME VARCHAR(10),LOC VARCHAR(10))
+
+INSERT INTO Dept VALUES(10,'A/C','NEW YORK')
+INSERT INTO Dept VALUES(20,'RESEARCH','DELLAS')
+INSERT INTO Dept VALUES(30,'SALES','CHICAGO')
+
+SELECT * FROM DEPT
+
+						-- SIMPLE VIEW
+CREATE VIEW SIMPLE_VIEW
+AS
+SELECT * FROM EMP WHERE DNO=10
+
+SELECT * FROM SIMPLE_VIEW
+
+					-- COLUMN LEVEL SECURITY
+CREATE VIEW SV1
+AS
+SELECT EID,ENAME,JOB,DNO FROM EMP
+
+SELECT * FROM SV1
+
+CREATE VIEW SV2
+AS
+SELECT EID,ENAME,JOB,DNO FROM EMP WHERE DNO=10 AND SAL>=25000
+
+SELECT * FROM SV2
+
+						-- DML OPERATIONS
+SELECT * FROM EMP
+SELECT * FROM SIMPLE_VIEW
+
+-- INSERT
+INSERT INTO SIMPLE_VIEW VALUES(112,'ABD','DEV',20000,10)
+
+-- UPDATE 
+UPDATE SIMPLE_VIEW SET SAL=60000 WHERE ENAME='SUNIL'
+
+-- DELETE
+DELETE FROM SIMPLE_VIEW WHERE EID=112
+
+					-- COMPLEX VIEW
+
+create table EMP_HYD(EID INT,ENAME VARCHAR(10),ESALARY INT)
+insert into EMP_HYD VALUES(101,'ADAMS',85000),
+							(102,'MILLER',76000),
+							(103,'SCOOT',45000),
+							(104,'PANDY',46000)
+
+create tablE EMP_CHENNAI(EID INT,ENAME VARCHAR(10),ESALARY INT)
+insert into EMP_CHENNAI VALUES(101,'ADAMS',85000)
+insert into EMP_CHENNAI VALUES(105,'warner',35000)
+insert into EMP_CHENNAI VALUES(106,'finch',56000)
+
+SELECT * FROM EMP_HYD
+SELECT * FROM EMP_CHENNAI
+
+CREATE VIEW COMPLEX_VIEW
+AS
+SELECT * FROM EMP_HYD
+UNION ALL
+SELECT * FROM EMP_CHENNAI
+
+SELECT * FROM COMPLEX_VIEW
+
+					-- DML OPERATIONS
+-- INSERT
+INSERT INTO COMPLEX_VIEW VALUES(110,'ABD',20000)
+
+-- UPDATE
+UPDATE COMPLEX_VIEW SET ESALARY=90000 WHERE ENAME='ADAMS'
+
+-- DELETE
+DELETE FROM COMPLEX_VIEW WHERE EID=106
+
+
+SELECT * FROM EMP
+SELECT * FROM DEPT
+
+UPDATE DEPT SET DNAME='A/C' WHERE DNO=10
+
+CREATE VIEW CV2
+AS
+SELECT EID,ENAME,JOB,SAL,EMP.DNO,DNAME,LOC FROM EMP INNER JOIN DEPT ON EMP.DNO=DEPT.DNO
+
+SELECT * FROM CV1
+
+-- INSERT
+INSERT INTO CV1 VALUES(112,'ABD','DEV',20000,10,'A/C','NEW YORK')
+
+-- UPDATE
+UPDATE CV1 SET SAL=80000,DNAME='RESEARCH' WHERE ENAME='SUNIL'
+
+UPDATE CV1 SET DNAME='RESEARCH' WHERE ENAME='SUNIL'
+
+-- DELETE
+DELETE FROM CV1 WHERE EID=10
+
+
+
+
+		
+
+
+
+
+

@@ -1,0 +1,211 @@
+
+						Indexes
+						-------
+	An Index is a database object that improves the speed of data retrieval from a table.
+        Ex: Book Index
+            Instead of scanning the whole book, we can directly jump to the pages
+
+        Why do we need Indexes:
+        ======================
+	1)Faster Query Performance -- Speed up SELECT queries
+	2)Avoid Full Table Scan -- Uses index to find rows quickly
+	3)Efficient Filtering & Sorting -- Improves WHERE, ORDER BY, GROUP BY
+	4)Join Optimization -- Faster Joins between tables
+
+	Types of Indexes:
+	-----------------
+	1)Clustered Index:1)Determines the physical order of data in table
+			  2)One Clustered Index per table
+	Ex:
+	CREATE CLUSTERD INDEX idx_EmpID on Employees(EmpID)    
+
+v_
+fn_
+USP_
+idx
+
+        
+        -->Data rows stored in sorted order
+        -->Fast for: a)Range queries b)sorting
+        -->When to use--> Column is frequently used in WHERE or ORDER BY
+
+	2)Non-Clustered Index:1)Stored separately from data
+                              2)Contains pointers to actual rows
+	Ex:
+	CREATE INDEX idx_name on Employees(Ename)
+
+	-->Can create multiple indexes per table
+	-->Does not change physical data order
+	-->When to use-->Searching by non-primary columns
+
+	3)Unique Index: Ensures column values are unique(prevents duplicate values)
+	Ex:
+	CREATE UNIQUE INDEX idx_Email on Employees(Email)
+
+	4)Composite Index(Multi-column):Index on multiple columns
+	Ex:
+	CREATE INDEX idx_namedept on employees(Name,Department)
+
+        -->When to use --> Query filters multiple columns
+
+	5)Covering Index: Index required all required columns for query
+	Ex:
+	CREATE INDEX idx_Covering on Employees(Department)
+	INCLUDE (Name,Salary)
+     
+     	Note:Query does not need to access table - faster
+	
+	6)Filtered Index: Index on subset of data
+	Ex:
+	CREATE INDEX idx_departments on employees(Name) where department='HR'
+
+	Note: Smaller size + faster performance
+
+	Drop Index:
+        ==========
+	Drop Index idx_name on Employees
+
+	Where to use Indexes:
+	--------------------
+	Scenario			Recommended Index
+	========			=================
+	Frequent Where Condition	Non-Clustered Index
+	Primary Key			Clustered Index
+	Unique values			Unique Index
+	Join columns			Non-clustered Index
+	Large table filtering		Filtered Index
+	Range Queries			Clustered Index
+
+	Advantages:
+	----------
+	1)Improves query performance
+	2)Reduces IO Operations
+	
+	Disadvantages:
+	-------------
+	1)Slow down --> Insert,Update,Delete
+	2)Uses additional storage
+
+
+
+	
+
+	Indexes are used to Retrieve / get the Data from the tables very quickly
+	Indexes are used to Improve the Performance of the Queries
+
+	The Default Search Process is "Sequential Search"
+
+	Select * from Emp where Esalary Between 20000 and 40000
+
+	Types of Indexes
+	-----------------------
+	1.Clustered Index
+	2.Non-Clustered Index
+	3.Unique Index
+	4.Composite Index
+
+	1.Clustered Index
+	-------------------------
+	Clustered Index are used to Rearrange the Data in the Table either in Asc / Desc
+	Only one Clustered Index for one table
+	P.K will Automatically creates an Clustered Index
+	Both the Index and Data is Stored at one Place
+
+	4.Composite Index
+	--------------------------
+	Creating the Clustered Index Combinedly for Multiple Columns is known as "Composite Index"
+
+	2.Non-Clustered Index
+	-------------------------------
+	In Non-Clustered Indexes the Data is Stored at one Place and the Index is Stored at another Place
+	The Non-Clustered Indexes will have the Pointer to Store the Location of Data
+	We can Create multiple Non-Clustered Indexes for Multiple Columns in a table because the Data is Stored at one Place and the Index is Stored at another Place
+	
+	3.Unique Index
+	--------------------
+	Unique Constraint  --> Unique Non-Clustered Index
+	If the Column doesn't contains the Duplicate values on those Columns only we are able to Create the Unique Index
+
+
+---------------------------------------------------------------------------------------------------
+CREATE DATABASE INDEXESS
+
+USE INDEXESS
+
+CREATE TABLE EMP(ENO INT,ENAME VARCHAR(20),SALASRY INT,DNO INT)
+
+INSERT INTO EMP VALUES(2,'WARNER',12000,10)
+INSERT INTO EMP VALUES(4,'SMITH',14000,20)
+INSERT INTO EMP VALUES(1,'SCOOT',16000,30)
+INSERT INTO EMP VALUES(5,'FINCH',18000,10)
+INSERT INTO EMP VALUES(3,'STARCH',20000,20)
+
+SELECT * FROM EMP
+
+-- CLUSTERED INDEX
+CREATE CLUSTERED INDEX CLUS_EMP_ENO ON EMP(ENO)
+
+CREATE CLUSTERED INDEX CLUS_EMP_SALARY ON EMP(SALASRY)
+
+DROP INDEX EMP.CLUS_EMP_ENO
+
+
+CREATE TABLE EMP1(ENO INT PRIMARY KEY,ENAME VARCHAR(20),SALARY INT,DNO INT)
+
+INSERT INTO EMP1 VALUES(2,'WARNER',12000,10)
+INSERT INTO EMP1 VALUES(4,'SMITH',14000,20)
+INSERT INTO EMP1 VALUES(1,'SCOOT',16000,30)
+INSERT INTO EMP1 VALUES(5,'FINCH',18000,10)
+INSERT INTO EMP1 VALUES(3,'STARCH',20000,20)
+
+SELECT * FROM EMP1
+
+DROP INDEX EMP1.PK__EMP1__C190FFA91E973B3F
+
+
+SP_HELP EMP
+
+SP_HELPINDEX EMP
+
+--COMPOSITE INDEX
+CREATE CLUSTERED INDEX CLUS_EMP_ENO_SAL ON EMP(ENO,SALASRY)
+
+					-- NON-CLUSTERED INDEX
+CREATE NONCLUSTERED INDEX NONCLUS_EMP_DNO ON EMP(DNO)
+
+CREATE NONCLUSTERED INDEX NONCLUS_EMP_ENAME ON EMP(ENAME)
+
+					-- UNIQUE INDEX
+CREATE TABLE STUDENTS(SID INT,SNAME VARCHAR(20),MARKS INT)
+
+INSERT INTO STUDENTS VALUES(1,'WARNER',510)
+INSERT INTO STUDENTS VALUES(2,'SMITH',550)
+INSERT INTO STUDENTS VALUES(3,'SCOOT',450)
+INSERT INTO STUDENTS VALUES(2,'FINCH',410)
+
+SELECT * FROM STUDENTS
+
+CREATE UNIQUE INDEX UNIQ_STUDENTS_SID ON STUDENTS(SID)
+
+CREATE UNIQUE INDEX UNIQ_STUDENTS_SNAME ON STUDENTS(SNAME)
+
+CREATE TABLE STUDENTS1(SID INT UNIQUE,SNAME VARCHAR(20),MARKS INT)
+
+INSERT INTO STUDENTS1 VALUES(1,'WARNER',510)
+INSERT INTO STUDENTS1 VALUES(2,'SMITH',550)
+INSERT INTO STUDENTS1 VALUES(3,'SCOOT',450)
+
+
+SELECT * FROM STUDENTS
+
+SP_HELP STUDENTS1
+
+
+
+
+
+
+
+
+
+

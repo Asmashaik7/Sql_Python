@@ -1,0 +1,95 @@
+A User Defined Function(UDF) is a reusable function.
+1)It accepts Input parameters
+2)It performs some logic
+3)It returns a value or a table.
+
+Why do we use Functions:
+=======================
+1)Reusability(write once, use many times)
+2)Simplify complex logic
+3)Improve readability of queries
+4)Used in SELECT, WHERE, JOIN etc.
+
+
+How to Create a Function
+========================
+CREATE FUNCTION function_name (@parameter datatype, ...)
+RETURNS return_datatype
+AS
+BEGIN
+    -- Function logic
+    RETURN value
+END
+
+Rules:
+=====
+1)Must return a values(scalar/table)
+2)Can not modify database data(No Insert,Update,Delete(for scalar/inline)
+3)Can not use in Dynamic SQL and Temporary Tables(#temp)
+4)Can be used in queries
+
+The main types are:
+===================
+1)Scalar Functions: Returns single value
+Ex:
+CREATE FUNCTION dbo.fn_GetBonus(@Salary INT)
+RETURNS INT
+AS
+BEGIN
+	RETURN (@Salary*10)/100
+END
+
+SELECT
+	NAME,SALARY,dbo.fn_GetBonus(SALARY) AS Bonus
+FROM EMPLOYEES
+2)Inline Table-Valued Functions(ITVF):1)Returns a table
+				      2)Contains a single Select statement
+
+CREATE FUNCTION dbo.fn_GetEmployees()
+RETURNS TABLE
+AS
+RETURN
+(
+	SELECT EMPID,NAME FROM EMPLOYEES
+	WHERE DEPARTMENT='IT'
+)
+
+SELECT * FROM dbo.fn_GetEmployees()
+
+When to use:1)Simple Filtering Logic
+	    2)Better performance than other functions
+
+3)Multi-Statement Table-Valued Functions(MTVF):1)Returns a table
+					       2)Can contain multiple SQL statements
+
+Ex:
+CREATE FUNCTION dbo.fn_GetEmployeesbyDept(@Dept varchar(15))
+RETURNS @Result TABLE
+(
+	EMPID INT,
+	NAME VARCHAR(50)
+)
+AS
+BEGIN
+	INSERT INTO @Result
+	SELECT EMPID,NAME FROM EMPLOYEES WHERE DEPARTMENT=@Dept
+
+	RETURN
+END
+
+SELECT * FROM dbo.fn_GetEmployeesbyDept('HR')
+
+
+
+Functions Vs. Stored Procedures:
+===============================
+
+Feature				Functions			Stored Procedures
+
+Return Value			Mandatory(value/Table)		Optional
+Usage in Select			Yes				No
+Data Modification		Not allowed(generally)		Allowed
+Transactions			Not Supported			Supported
+Parameters			Input only			Input & Ouput
+Exception Handling		Limited				Full support
+Calls				Inline usage			EXEC Statement
