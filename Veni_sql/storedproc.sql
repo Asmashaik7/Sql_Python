@@ -1,6 +1,7 @@
 --STORED PROCEDURES
 /*
-A stored procedure is a precompiled collection of SQL statements stored in the sql server database that can be executed whenever needed.
+A stored procedure is a precompiled collection of SQL statements stored in the sql server database
+that can be executed whenever needed.
 
 --PERFORAMNCE IMPROVEMENT
 --REDUCES NETWORK TRAFFIC
