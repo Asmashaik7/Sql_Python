@@ -1,0 +1,10 @@
+Database people love fancy names for simple things:
+
+Fancy Term			Simple Meaning
+Ad-hoc Query			One-time query
+Stored Procedure		Saved SQL program
+Scalar Function			Function returning one value
+Table-Valued Function		Function returning a table
+Cursor				Row-by-row loop
+ETL					Extract, Transform, Load
+Normalization			Organizing tables properly
