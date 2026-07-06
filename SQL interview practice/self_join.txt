@@ -1,0 +1,8 @@
+
+--what relationship you're trying to find between two rows of the same table.thats where we should use in ON
+
+What you're comparing                       ON condition                Is it an ID?
+Employee → Manager relationshipe.           managerId = m.id           Yes (ID-based, because ManagerId is an ID reference)
+Employees with same salary                  e.salary = m.salary         No — salary isn't an ID, but it's still the "common thing"
+Employees who joined on the same date       e.joinDate = m.joinDate     No — date is the common thing here
+Employees in the same department            e.deptId = m.deptId         Yes — department ID is common here

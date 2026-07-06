@@ -1,0 +1,10 @@
+--Term
+What it is Window function
+DENSE_RANK() OVER (ORDER BY salary DESC) — calculates a value across a set of rows without collapsing them (unlike GROUP BY)
+
+Subquery:
+A query nested inside another query's FROM, WHERE, or SELECT
+
+CTE:
+A named temporary result using WITH ... AS (...), used before the main query
+
