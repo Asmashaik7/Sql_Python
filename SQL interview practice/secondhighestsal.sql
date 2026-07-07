@@ -1,3 +1,6 @@
+--Second highest salary , using subqueries.
+--nth salary means n number of times we should q=write the subquery within another, nested queries.
+-- this is a technique. o.w use window functions to get it.
 CREATE TABLE Employee (
     Id INT,
     Name VARCHAR(50),
