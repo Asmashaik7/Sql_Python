@@ -130,29 +130,218 @@ Show customers who have placed at least one order using IN.*/
 select customerid, customerName 
 from customers 
 where customerid IN(select customerid from Orders)
+/*customerid	customerName
+1	Asma
+3	John
+5	David*/
 
 --Show the same result using EXISTS.
-select customerid, customerName 
-from customers c
-where EXISTS (select 1 from Orders o where c.customerid=o.customerid)
-
+SELECT CustomerID, CustomerName
+FROM Customers c
+WHERE EXISTS
+(
+    SELECT 1
+    FROM Orders o
+    WHERE c.CustomerID = o.CustomerID
+);
+/*CustomerID	CustomerName
+1	Asma
+3	John
+5	David*/
 ==================================pending-===================
 Level 2
 Show customers who have not placed any order using NOT IN.
-Show the same result using NOT EXISTS.
+select customerid, customerName 
+from customers 
+where customerid NOT IN(select customerid from Orders)
+/*customerid	customerName
+2	Rahul
+4	Sara
+6	Aisha*/
+
+Show the same result using NOT EXISTS
+SELECT CustomerID, CustomerName
+FROM Customers c
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM Orders o
+    WHERE c.CustomerID = o.CustomerID
+);
+
+/*Suppose the Orders table becomes:
+
+OrderID	CustomerID
+101	1
+102	NULL
+103	3
+104	5 Now run*/
+SELECT CustomerID, CustomerName
+FROM Customers
+WHERE CustomerID NOT IN
+(
+    SELECT CustomerID
+    FROM Orders
+);
+/*RESULT:
+subquery returns (1, NULL, 3, 5)
+Is 2 NOT IN (1, NULL, 3, 5)?
+SQL doesn't know what NULL is. It means "unknown. 2 is definitely not in this list
+TRUE ✅ → row returned
+FALSE ❌ → row not returned
+UNKNOWN ❌ → row not returned
+o/p: (0 rows)
+*/
+=================================================================
 Level 3
 Display only the names of customers who placed orders.
+select customerName 
+from customers 
+where customerID IN(select customerID from Orders)
+
+or 
+
+SELECT CustomerName
+FROM Customers c
+WHERE EXISTS
+(
+    SELECT 1
+    FROM Orders o
+    WHERE c.CustomerID = o.CustomerID
+);
+
+or 
+select distinct customerName 
+from customers c
+left join orders o
+where c.customerID=o.customerID
+
 Display all order details along with the customer name.
+SELECT
+    o.OrderID,
+    c.CustomerName,
+    o.ProductName,
+    o.Amount
+FROM Customers c
+INNER JOIN Orders o
+ON c.CustomerID = o.CustomerID;
+=========================================================
+"Display only the customer names who ordered a Laptop."
+
+Would you choose:
+
+A. IN
+
+B. EXISTS
+
+C. JOIN
+
+D. All of the above
+
+Think about it before answering. There's an interesting discussion behind the correct choice. 😊
+
+join
+
+Good thinking! 👍 JOIN is definitely a correct solution.
+
+For this particular question, though, the best interview answer is actually:
+
+✅ D. All of the above
+
+Let's see why.
+
+Requirement
+
+Display only the customer names who ordered a Laptop.
+
+We only need:
+
+CustomerName (from Customers)
+Filter: customers who ordered Laptop
+
+We are not displaying order details.
+
+✅ Using JOIN
+SELECT DISTINCT c.CustomerName
+FROM Customers c
+INNER JOIN Orders o
+ON c.CustomerID = o.CustomerID
+WHERE o.ProductName = 'Laptop';
+
+Output:
+
+CustomerName
+Asma
+✅ Using IN
+SELECT CustomerName
+FROM Customers
+WHERE CustomerID IN
+(
+    SELECT CustomerID
+    FROM Orders
+    WHERE ProductName = 'Laptop'
+);
+
+Output:
+
+CustomerName
+Asma
+✅ Using EXISTS
+SELECT CustomerName
+FROM Customers c
+WHERE EXISTS
+(
+    SELECT 1
+    FROM Orders o
+    WHERE c.CustomerID = o.CustomerID
+      AND o.ProductName = 'Laptop'
+);
+
+Output:
+
+CustomerName
+Asma
+=====================================================================
 Level 4 (Interview)
 Show customers whose total order amount is greater than 10,000.
+SELECT CustomerName
+FROM Customers
+WHERE CustomerID IN
+(
+    SELECT CustomerID
+    FROM Orders
+    GROUP BY CustomerID
+    HAVING SUM(Amount) > 10000
+);
+
+--using EXISTS
+SELECT CustomerName
+FROM Customers
+WHERE EXISTS
+(
+    SELECT 1
+    FROM Orders o
+    where c.CustomerID = o.CustomerID
+    GROUP BY CustomerID
+    HAVING SUM(o.Amount) > 10000
+);
+
 Show customers who have placed more than one order.
 
 
 
 
+SELECT 1 = NULL;
+--SYNTAX ERROR--Incorrect syntax near '='.
+SELECT 1 <> NULL;
+--SYNTAX ERROR--Incorrect syntax near '<'.
 
-
-
+SELECT
+    CASE
+        WHEN 1 = NULL THEN 'TRUE'
+        ELSE 'FALSE'
+    END; 
+--FALSE
 =========================================================================
 --CASE,WHEN
 CREATE TABLE Employees
