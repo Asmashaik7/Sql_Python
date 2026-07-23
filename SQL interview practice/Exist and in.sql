@@ -328,14 +328,70 @@ WHERE EXISTS
 
 Show customers who have placed more than one order.
 
+SELECT
+    c.CustomerName,
+    COUNT(*) AS TotalOrders
+FROM Customers c
+JOIN Orders o
+ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID, c.CustomerName
+HAVING COUNT(*) > 1;
 
+============================================
 
+Level 5 - Interview Question 1
+🏢 Business Scenario
+Your manager says:
+"We want to identify our best customers. Show customers who have placed exactly 2 orders."
 
+SELECT
+    c.CustomerName,
+    COUNT(*) AS TotalOrders
+FROM Customers c
+JOIN Orders o
+ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID, c.CustomerName
+HAVING COUNT(*) =2;
+
+=============================================
+Business Scenario
+The Sales Manager wants to reward the companys highest-value customer.
+Question:
+Show the customer who has spent the highest total amount across all their orders.
+
+SELECT top 1
+    c.CustomerName,
+    sum(amount) AS customer_Totalspent
+FROM Customers c
+JOIN Orders o
+ON c.CustomerID = o.CustomerID
+GROUP BY c.customerName,c.CustomerID
+order by sum(amount) desc
+
+==================================================
+Interview Question 4
+🏢 Business Scenario
+The Sales Manager wants to launch a Laptop loyalty campaign.
+Before sending promotional emails, they want to identify customers who have never purchased a Laptop.
+
+Question
+
+Display the names of customers who have never ordered a Laptop.
+select customername
+from customers c
+where not exists
+(select c.customerid 
+from orders o
+where c.customerid=o.customerid and o.productname='laptop'
+)
+
+============================================
 SELECT 1 = NULL;
 --SYNTAX ERROR--Incorrect syntax near '='.
 SELECT 1 <> NULL;
 --SYNTAX ERROR--Incorrect syntax near '<'.
 
+================================================================
 SELECT
     CASE
         WHEN 1 = NULL THEN 'TRUE'
