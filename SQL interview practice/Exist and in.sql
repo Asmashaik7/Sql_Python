@@ -384,6 +384,35 @@ where not exists
 from orders o
 where c.customerid=o.customerid and o.productname='laptop'
 )
+==========================================================================
+
+Interview Question 5
+🏢 Business Scenario
+
+The Finance Manager wants to identify premium customers.
+
+Instead of simply finding the highest spender, they want customers whose total spending is greater than the average total spending of all customers who have placed orders.
+
+Question
+
+Display the customer names whose total spending is greater than the average total spending of all customers who have placed orders.
+
+select c.customerid,  sum(amount) as customer_total_spent,
+from customers c
+group by c.customerid,o.amount
+where sum(amount) >(
+        select 1 
+        from orders o
+        avg(amount) as avg_amount,
+
+
+        
+
+        
+    
+        
+
+
 
 ============================================
 SELECT 1 = NULL;
