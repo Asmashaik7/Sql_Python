@@ -112,3 +112,18 @@ CustomerName	total_Spent
 Asma	60800*/
 
 ---------------------------------------------------------------------------
+--Display the names of customers who have never ordered a Laptop.
+select 
+    c.CustomerName
+from Customers c
+where not exists (select 1 from orders o
+                        where c.customerid=o.customerid and o.ProductName='laptop')
+ --where c.customerid=o.customerid, This is what makes it a correlated subquery. Every customer is checked individually.
+ /*Requirement	                        Think First
+Exactly / At least / More than	        GROUP BY + HAVING
+Highest / Lowest	                    ORDER BY + TOP 1
+Never / Doesn't have	                NOT EXISTS
+Has at least one	                    EXISTS
+Compare with average	                Subquery + Aggregate*/
+
+----------------------------------------------------------------------------------
