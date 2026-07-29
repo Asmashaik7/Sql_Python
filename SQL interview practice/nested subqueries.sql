@@ -160,5 +160,19 @@ Don't panic. Say this in your mind:
 Output → Table → Join → Group → Subquery → Having
 
 That's the order in which you should think.
+================================================================
+
+⭐ Codey's SQL Pattern Book (save this)
+If the question says...	        Immediately think...
+Total per customer	            GROUP BY
+Average of totals	            Derived Table → AVG(SUM())
+Greater than average	        Subquery
+Display names	                Start from the table containing names
+Filter aggregate	            HAVING
+Filter rows	                    WHERE
+Does a row exist?	            EXISTS
+Never exists	                NOT EXISTS
+Highest	                        TOP 1 + ORDER BY DESC
+Duplicates	                    GROUP BY + COUNT(*)
 
 */
