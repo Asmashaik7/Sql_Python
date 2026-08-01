@@ -20,12 +20,31 @@ WITH rev_cte as
 	OrderID,
 	CustomerID,
 	Amount,
-	sum(amount) over(partition by CustomerID) as cust_revenue
+	sum(amount) as cust_revenue
+    group by customerID
 	)
-	from orders
+	
 )
 select customerid
 from rev_cte
 having cust_revenue>avg(cust_rev)
+======================================================
 
-select 
+WITH CustomerRevenue AS
+(
+    SELECT
+        CustomerID,
+        SUM(Amount) AS Revenue
+    FROM Orders
+    GROUP BY CustomerID
+)
+
+SELECT
+    CustomerID,
+    Revenue
+FROM CustomerRevenue
+WHERE Revenue >
+(
+    SELECT AVG(Revenue)
+    FROM CustomerRevenue
+);
