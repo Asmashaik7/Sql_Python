@@ -257,6 +257,42 @@ CustomerID	TotalRevenue	RevenueRank
 9	7000.00	2
 7	6500.00	3
 3	6500.00	3
-*/
+
 
 ===================================================
+
+"When would you use TOP and when would you use DENSE_RANK()?"
+
+A strong answer is:
+
+TOP when you need exactly N rows.
+DENSE_RANK() when the business wants the top N positions and ties should be included.
+
+"Show me exactly the Top 3 customers by revenue."
+
+Use TOP 3.
+
+Why didn't you use DENSE_RANK() here?
+
+A strong answer is:
+
+"TOP 3 WITH TIES is simpler when the only requirement is to return the top rows including ties. I would use DENSE_RANK() if I also needed to display the rank for each customer or perform additional filtering based on rank."*/
+
+WITH cte1 AS
+(
+    SELECT CustomerID,
+           SUM(Amount) AS TotalRevenue
+    FROM Orders1
+    GROUP BY CustomerID
+)
+SELECT TOP 3
+       CustomerID,
+       TotalRevenue
+FROM cte1
+ORDER BY TotalRevenue DESC;
+/*
+CustomerID	TotalRevenue
+5	8000.00
+9	7000.00
+3	6500.00
+*/
