@@ -295,4 +295,63 @@ CustomerID	TotalRevenue
 5	8000.00
 9	7000.00
 3	6500.00
-*/
+
+==================================================================
+Business scenario:
+
+You're analyzing an e-commerce company. The manager says:
+
+"Find customers whose total revenue is greater than the average revenue of all customers."
+
+This is a classic interview question because it combines:
+
+CTE + aggregate of aggregate + subquery
+
+Use the Orders1 table we've been practicing with.*/
+
+
+WITH cte1 AS
+(
+    SELECT CustomerID,
+           SUM(Amount) AS TotalRevenue
+    FROM Orders1
+    GROUP BY CustomerID
+),
+cte2 as
+(
+select
+avg(TotalRevenue) as avg_revenue
+FROM cte1
+)
+select
+    cte1.CustomerID,
+    cte1.TotalRevenue,
+    cte2.avg_revenue
+FROM cte1
+CROSS JOIN cte2
+WHERE cte1.TotalRevenue > cte2.avg_revenue;
+/*
+CustomerID	TotalRevenue	avg_revenue
+1	4500.00	3880.000000
+3	6500.00	3880.000000
+5	8000.00	3880.000000
+7	6500.00	3880.000000
+9	7000.00	3880.000000
+
+Create intermediate result
+        ↓
+CTE
+        ↓
+Treat CTE like a table
+        ↓
+JOIN it with another table/CTE
+        ↓
+Continue analysis*/
+
+
+
+
+
+
+
+
