@@ -346,7 +346,12 @@ Treat CTE like a table
         ↓
 JOIN it with another table/CTE
         ↓
-Continue analysis*/
+Continue analysis
+==================================================
+QUESTION: why would you choose a CTE here when a simple JOIN + GROUP BY can solve the problem
+"A CTE is useful when the query involves multiple logical steps or becomes complex. 
+It allows us to separate the logic into readable intermediate result sets and reference those results within the same SQL statement."
+*/
 
 
 
