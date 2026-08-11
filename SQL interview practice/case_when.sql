@@ -170,3 +170,4 @@ when Salary inbetween 30000 and 60000 then 'Medium'
 when Salary > 60000 then 'High'
 end as Salary_Category
 from employees;
+==========================================================
