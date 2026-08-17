@@ -233,6 +233,117 @@ OrderID	OrderDate	DeliveryDate	DeliveryDays
 
 
 ===============================================================================
+Next: DATEPART() vs YEAR() / MONTH()
 
+Business scenario
 
+Your manager wants an order calendar report showing:
+
+"For every order, tell me the year, month, quarter, and weekday number on which the order was placed."
+
+You need:
+
+OrderID
+OrderDate
+OrderYear
+OrderMonth
+OrderQuarter
+OrderWeekday
+*/
+select OrderID,
+OrderDate,
+datepart(year,OrderDate) as Order_Year,
+datepart(month,OrderDate) as Order_Month,
+datepart(quarter, OrderDate) as Order_Quarter,
+datepart(weekday, OrderDate) as Order_Weekday
+from date_orders;
+
+/*RESULT:
+OrderID	OrderDate	Order_Year	Order_Month	Order_Quarter	Order_Weekday
+101	       2026-08-10	2026	    8	3	2
+102	        2026-08-05	2026	    8	3	4
+103	        2026-07-25	2026	    7	3	7
+104	        2026-07-15	2026	    7	3	4
+105	        2026-06-20	2026	    6	2	7
+106	        2026-08-01	2026	    8	3	7
+107	        2026-07-10	2026	    7	3	6
+108	        2026-05-30	2026	    5	2	7
+========================================================
+Next challenge: EOMONTH()
+
+Your manager says:
+
+"For every order, show the OrderID, OrderDate, and the last date of the month in which the order was placed."
+
+Write the query using:
+
+OrderID
+OrderDate
+MonthEnd*/
+
+select OrderID,
+OrderDate,
+EOMonth(OrderDate) as MonthEnd
+from date_orders;
+/*RESULT
+OrderID	OrderDate	MonthEnd
+101	2026-08-10	2026-08-31
+102	2026-08-05	2026-08-31
+103	2026-07-25	2026-07-31
+104	2026-07-15	2026-07-31
+105	2026-06-20	2026-06-30
+106	2026-08-01	2026-08-31
+107	2026-07-10	2026-07-31
+108	2026-05-30	2026-05-31
+
+=======================================================================
+PRACTICE: DAY(OrderDate)*/
+
+select orderdate,DAY(OrderDate) as DAY_of_order from date_orders;
+/*Result:
+orderdate	DAY_of_order
+2026-08-10	10
+2026-08-05	5
+2026-07-25	25
+2026-07-15	15
+2026-06-20	20
+2026-08-01	1
+2026-07-10	10
+2026-05-30	30
+=========================================================================
+ Business Scenario
+
+You're a Junior Data Analyst at an e-commerce company.
+
+Your manager asks:
+
+"Create an order analysis report. For every order, show the order ID, the year and quarter in which it was placed, how many days it took to deliver, and the last date of the order's month."
+
+From our date_orders table, return:
+
+OrderID
+OrderYear
+OrderQuarter
+DeliveryDays
+MonthEnd*/
+
+select * from date_orders;
+
+    select OrderID,
+    Year(orderdate) as OrderYear,
+    datepart(quarter, orderdate) as OrderQuarter,
+    datediff(day,orderdate,deliverydate) as DeliveryDays,
+    EOMonth(orderdate) as MonthEnd
+    from date_orders;
+
+    /*RESULT:
+    OrderID	OrderYear	OrderQuarter	DeliveryDays	MonthEnd
+    101	2026	3	2	2026-08-31
+    102	2026	3	3	2026-08-31
+    103	2026	3	4	2026-07-31
+    104	2026	3	5	2026-07-31
+    105	2026	2	5	2026-06-30
+    106	2026	3	4	2026-08-31
+    107	2026	3	4	2026-07-31
+    108	2026	2	6	2026-05-31
 */
