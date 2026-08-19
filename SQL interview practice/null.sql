@@ -104,8 +104,6 @@ Business rule:
 Final Amount = Sales − Discount
 */
 
-SELECT COALESCE(NULL, 0) from Orders_NULL;
-
 SELECT Discount,
        COALESCE(Discount, 0) AS Discount_Handled
 FROM Orders_NULL;
@@ -126,4 +124,99 @@ orderID	CustomerID	sales	discount	final_amt
 2	102	1500.00	NULL	1500.00
 3	103	800.00	50.00	750.00
 4	104	2000.00	NULL	2000.00
-5	105	1200.00	200.00	1000.00*/
+5	105	1200.00	200.00	1000.00
+
+Remember this pattern: COALESCE(column, replacement_value)
+Use Discount; if it's NULL, use 0.
+
+And it can be used inside calculations:
+
+Sales - COALESCE(Discount, 0)
+=======================================================================
+--Next: ISNULL() vs COALESCE()
+Scenario 4 — Missing Customer Phone
+
+Your customer-support manager says:
+
+"When we generate the customer report, don't show NULL for missing phone numbers. Show 'Not Provided' instead."*/
+select *
+from Customers_NULL;
+
+select CustomerName,coalesce(Phone,'Not Provided') as Phone_status
+from Customers_NULL;
+/*
+CustomerName	Phone_status
+Ayesha	9876543210
+Rahul	Not Provided
+Sara	9123456780
+Imran	Not Provided
+Priya	9988776655
+
+One small refinement for interviews
+
+Don't say "COALESCE replaces the NULL in the table."
+
+It doesn't actually change the stored data.
+
+It returns a replacement value in the query result.
+If you run:
+
+SELECT
+    OrderID,
+    COALESCE(Discount, 0) AS Discount_Handled
+FROM Orders_NULL;
+
+You get:
+
+OrderID	Discount_Handled
+1	100
+2	0
+3	50
+
+It looks like the NULL became 0.
+
+But the actual table is still:
+
+OrderID	Discount
+1	100
+2	NULL
+3	50
+
+If you run:
+
+SELECT *
+FROM Orders_NULL;
+
+Order 2's Discount is still NULL.
+
+🧠 So there are two different ideas
+
+1. Handle NULL in a query
+
+COALESCE(Discount, 0)
+
+➡️ Changes the query result only.
+➡️ Original table remains unchanged.
+
+2. Actually change the stored data
+
+That requires something like:
+
+UPDATE Orders_NULL
+SET Discount = 0
+WHERE Discount IS NULL;
+
+➡️ This really changes the table.
+
+🎤 Interview tip
+
+If an interviewer asks:
+
+"Does COALESCE() update the NULL values in the table?"
+
+You can say:
+
+"No. COALESCE only handles NULL values in the query result. It doesn't modify the underlying table data unless it's used as part of an UPDATE statement."
+
+And one more important point: NULL handling doesn't always mean replacing the data. Sometimes we simply filter NULLs with IS NULL / IS NOT NULL, sometimes we substitute a value with COALESCE(), and sometimes we leave NULL as it is but account for it correctly in calculations.
+*/
