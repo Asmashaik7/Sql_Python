@@ -64,6 +64,11 @@ CustomerID	CustomerName
 103	Sara
 105	Priya
 =========================================================================================
+COALESCE() — Definition
+
+COALESCE() returns the first non-NULL value from a list of expressions. 
+It is commonly used to handle NULL values by providing a fallback value.
+
 
 Scenario 3 — Handling NULL in a Calculation
 
@@ -219,4 +224,67 @@ You can say:
 "No. COALESCE only handles NULL values in the query result. It doesn't modify the underlying table data unless it's used as part of an UPDATE statement."
 
 And one more important point: NULL handling doesn't always mean replacing the data. Sometimes we simply filter NULLs with IS NULL / IS NOT NULL, sometimes we substitute a value with COALESCE(), and sometimes we leave NULL as it is but account for it correctly in calculations.
+
+==========================================================================================
+Scenario 5 — Best Available Contact
+
+You're a Junior Data Analyst at an e-commerce company.
+
+The customer-support team wants one contact value for every customer.
+
+Their priority is:
+
+Use PersonalPhone if available.
+If PersonalPhone is NULL → use WorkPhone.
+If both are NULL → use Email.
+If all three are NULL → show 'No Contact'.
+Create this table
+
+Run in SSMS:*/
+
+CREATE TABLE CustomerContact
+(
+    CustomerID INT,
+    CustomerName VARCHAR(50),
+    PersonalPhone VARCHAR(20),
+    WorkPhone VARCHAR(20),
+    Email VARCHAR(100)
+);
+
+
+INSERT INTO CustomerContact
+VALUES
+(101, 'Ayesha', '9876543210', '8888888888', 'ayesha@email.com'),
+(102, 'Rahul', NULL, '8777777777', 'rahul@email.com'),
+(103, 'Sara', NULL, NULL, 'sara@email.com'),
+(104, 'Imran', NULL, NULL, NULL),
+(105, 'Priya', '9999999999', NULL, 'priya@email.com');
+
+SELECT *
+FROM CustomerContact;
+
+/*RESULT:
+CustomerID	CustomerName	PersonalPhone	WorkPhone	Email
+101	        Ayesha	        9876543210	    8888888888	ayesha@email.com
+102	        Rahul	        NULL	        8777777777	rahul@email.com
+103	        Sara	        NULL	        NULL	    sara@email.com
+104	        Imran	        NULL	        NULL	    NULL
+105	        Priya	        9999999999	    NULL	    priya@email.com
+
+Business requirement
+
+The manager asks:
+
+"Show CustomerName and the best available contact using our priority order."
+*/
+select CustomerName,
+coalesce(PersonalPhone,WorkPhone,Email,'No contact') as Best_contact
+from CustomerContact;
+/*
+CustomerName	Best_contact
+Ayesha	9876543210
+Rahul	8777777777
+Sara	sara@email.com
+Imran	No contact
+Priya	9999999999
 */
