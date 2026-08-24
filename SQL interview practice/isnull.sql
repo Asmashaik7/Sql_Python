@@ -143,6 +143,7 @@ Bonus,
 isnull(bonus,0) as bonus_handled,
 (salary+bonus_handled) as TotalCompensation
 from EmployeeBonus;
+--ERROR
 
 select EmployeeID, 
 EmployeeName, 
@@ -176,4 +177,6 @@ So your current mental model is good:
 
 ISNULL() → simple two-choice NULL handling
 COALESCE() → first non-NULL from multiple choices*/
+
+
 
