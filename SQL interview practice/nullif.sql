@@ -241,3 +241,90 @@ Imran	        5000.00	    0.00	    No Target
 COALESCE() → find a non-NULL value / provide fallback
 ISNULL() → replace NULL with a fallback (SQL Server)
 NULLIF() → turn a specific matching value into NULL
+-------------------------------------------
+One thing I want you to notice
+
+We actually used NULLIF() in two related ways:
+
+Purpose 1 — prevent an error
+
+Sales / NULLIF(Target, 0)
+
+Purpose 2 — create a NULL condition
+
+NULLIF(0, 0)
+
+That distinction is worth remembering.
+======================================================================*/
+
+CREATE TABLE ProductMargin
+(
+    ProductID INT,
+    ProductName VARCHAR(50),
+    SellingPrice DECIMAL(10,2),
+    CostPrice DECIMAL(10,2)
+);
+
+INSERT INTO ProductMargin
+VALUES
+(101, 'Laptop', 60000, 45000),
+(102, 'Phone', 30000, 20000),
+(103, 'Tablet', 25000, 0),
+(104, 'Monitor', 15000, 10000),
+(105, 'Keyboard', 3000, 1800);
+
+select * from ProductMargin;
+/*
+ProductID	ProductName	SellingPrice	CostPrice
+101	            Laptop	60000.00	45000.00
+102	            Phone	30000.00	20000.00
+103	            Tablet	25000.00	0.00
+104	            Monitor	15000.00	10000.00
+105	            Keyboard	3000.00	1800.00
+
+
+"Show ProductName, SellingPrice, CostPrice and ProfitMargin. If CostPrice is 0, display 'Cost not recorded'; otherwise calculate Profit Margin %."*/
+
+select ProductName,
+SellingPrice,
+CostPrice,
+    case
+        when CostPrice=0
+            then 'Cost not recorded'
+        else
+            CAST((SellingPrice -CostPrice)/SellingPrice*100 as varchar(20))
+        end as ProfitMargin
+from ProductMargin;
+
+/*
+ProductName                                        SellingPrice                            CostPrice                               ProfitMargin
+-------------------------------------------------- --------------------------------------- --------------------------------------- --------------------
+Laptop                                             60000.00                                45000.00                                25.0000000000000
+Phone                                              30000.00                                20000.00                                33.3333333333300
+Tablet                                             25000.00                                0.00                                    Cost not recorded
+Monitor                                            15000.00                                10000.00                                33.3333333333300
+Keyboard                                           3000.00                                 1800.00                                 40.0000000000000
+
+=============================================================
+
+Before we move on
+
+You've now covered the main NULL-handling tools we planned:
+
+1. IS NULL / IS NOT NULL: Identify missing values.
+
+2. COALESCE(): Return the first non-NULL value.
+
+    COALESCE(Phone, 'Not Provided')
+
+3. ISNULL(): SQL Server's two-value NULL replacement function.
+
+    ISNULL(Bonus, 0)
+
+4. NULLIF()
+
+Return NULL when two values are equal; particularly useful for avoiding divide-by-zero.
+
+Sales / NULLIF(Target, 0)
+
+*/
