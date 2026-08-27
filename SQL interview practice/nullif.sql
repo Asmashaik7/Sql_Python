@@ -326,5 +326,157 @@ You've now covered the main NULL-handling tools we planned:
 Return NULL when two values are equal; particularly useful for avoiding divide-by-zero.
 
 Sales / NULLIF(Target, 0)
+--------------------------------------------------------------------
+Mixed NULL Challenge 1 — Customer Orders
 
+You're working for an e-commerce company.
+
+Your manager wants a customer report showing:
+
+Customer name
+Order amount
+Discount
+Final Amount
+
+Business rule:
+
+If the discount is missing, treat it as 0.
+
+We already have Orders_NULL, but let's make the requirement slightly more realistic by joining customer information.
 */
+
+SELECT *
+FROM Customers_NULL;
+
+SELECT *
+FROM Orders_NULL;
+
+/*
+CustomerID	CustomerName	Email	    Phone
+101	        Ayesha	ayesha@email.com	9876543210
+102	        Rahul	rahul@email.com	    NULL
+103	        Sara	sara@email.com    9123456780
+104	         Imran	imran@email.com 	NULL
+105	        Priya	priya@email.com	    9988776655
+
+
+
+OrderID	CustomerID	Sales	Discount
+1	    101	        1000.00	100.00
+2	    102	        1500.00	NULL
+3	    103	        800.00	50.00
+4	    104	        2000.00	NULL
+5	    105	        1200.00	200.00
+
+Write a query that returns:
+
+CustomerName
+Sales
+Discount
+FinalAmount
+*/
+
+select c.CustomerName,
+o.Sales,
+o.Discount,
+o.Sales-o.discount as FinalAmount
+from Customers_NULL c
+join Orders_NULL o
+on c.CustomerID=o.CustomerID
+
+/*
+CustomerName	Sales	Discount	FinalAmount
+Ayesha	        1000.00	100.00	900.00
+Rahul	        1500.00	NULL	NULL
+Sara	        800.00	50.00	750.00
+Imran	        2000.00	NULL	NULL
+Priya	        1200.00	200.00	1000.00*/
+
+select c.CustomerName,
+o.Sales,
+isnull(o.Discount,0) as Given_Discount,
+o.Sales-isnull(o.Discount,0) as FinalAmount
+from Customers_NULL c
+join Orders_NULL o
+on c.CustomerID=o.CustomerID
+
+/*
+CustomerName	Sales	Given_Discount	FinalAmount
+Ayesha	        1000.00	    100.00	    900.00
+Rahul	        1500.00	    0.00	    1500.00
+Sara	        800.00	    50.00	     750.00
+Imran	        2000.00	    0.00	    2000.00
+Priya	        1200.00	    200.00	    1000.00
+
+================================================================================================
+Mixed Challenge 2 — Customer Contact
+
+Now let's make you choose between COALESCE() and ISNULL().
+
+The customer-service team wants a report containing:
+
+Customer name
+Best Contact
+
+Business rule:
+
+Use the customer's PersonalPhone if available.
+If that's missing, use WorkPhone.
+If that's also missing, use Email.
+If all three are missing, show 'No Contact*/
+
+SELECT *
+FROM CustomerContact;
+/*
+CustomerID	CustomerName	PersonalPhone	WorkPhone	Email
+101	        Ayesha	9876543210	8888888888	ayesha@email.com
+102	        Rahul	NULL	    8777777777	rahul@email.com
+103	        Sara	NULL	    NULL	    sara@email.com
+104	        Imran	NULL	    NULL	    NULL
+105	        Priya	9999999999	NULL	    priya@email.com
+*/
+
+select CustomerName,
+coalesce(PersonalPhone,WorkPhone,Email,'No contact') as Best_Contact
+from CustomerContact;
+
+/*
+CustomerName	Best_Contact
+Ayesha	9876543210
+Rahul	8777777777
+Sara	sara@email.com
+Imran	No contact
+Priya	9999999999
+
+=============================================================================
+Mixed Challenge 3 — Sales Target
+*/
+SELECT *
+FROM EmployeeTargets;
+
+/*
+EmployeeID	EmployeeName	Sales	    Target
+101	        Ayesha	        10000.00	10000.00
+102	        Rahul	    8000.00	        10000.00
+103	        Sara	    12000.00	    10000.00
+104	        Imran	    5000.00	        0.00
+
+The manager asks:
+
+"Show each employee's target achievement percentage. If the employee has no target (Target = 0), show 'No Target' instead of calculating."*/
+
+select EmployeeName,
+Sales,
+case
+when 
+coalescs(Target,'No target') as Target
+then
+(Target-Sales)/ as PercentageAchieved
+from EmployeeTargets;
+
+
+
+
+
+
+
