@@ -93,6 +93,7 @@ No → return the first value, 5000. ✅
 So now you have the rule:
 
 NULLIF(value1, value2) returns NULL if the two values are equal; otherwise it returns value1.*/
+
 SELECT
     NULLIF(10000, 0) AS Result1,
     NULLIF(0, 0) AS Result2,
@@ -468,11 +469,22 @@ The manager asks:
 select EmployeeName,
 Sales,
 case
-when 
-coalescs(Target,'No target') as Target
+when Target=0
 then
-(Target-Sales)/ as PercentageAchieved
+    'No target'
+else 
+    cast(Sales/Target *100 as varchar(20))
+end as PercentageAchieved
 from EmployeeTargets;
+
+/*
+EmployeeName	Sales	PercentageAchieved
+Ayesha	10000.00	100.0000000000000
+Rahul	8000.00	80.0000000000000
+Sara	12000.00	120.0000000000000
+Imran	5000.00	No target
+*/
+
 
 
 
