@@ -156,4 +156,35 @@ CustomerID	Email	EmailProvider
 101	ayesha@gmail.com	gmail.com
 102	rahul@yahoo.com	yahoo.com
 
+--CHARINDEX('@', Email)
+
+This tells SQL Server where @ is located.
+
+And you know:
+
+SUBSTRING(text, start_position, length
 */
+
+select CustomerID,
+Email,
+substring(Email,charindex('@',Email),len(Email)) as EmailProvider
+from CustomerEmails;
+/*
+CustomerID	Email	EmailProvider
+101	ayesha@gmail.com	@gmail.com
+102	rahul@yahoo.com	@yahoo.com
+103	sara@outlook.com	@outlook.com
+104	imran@gmail.com	@gmail.com
+105	priya@yahoo.com	@yahoo.com*/
+
+select CustomerID,
+Email,
+substring(Email,charindex('@',Email)+1,len(Email)) as EmailProvider
+from CustomerEmails;
+/*
+CustomerID	Email	EmailProvider
+101	ayesha@gmail.com	gmail.com
+102	rahul@yahoo.com	yahoo.com
+103	sara@outlook.com	outlook.com
+104	imran@gmail.com	gmail.com
+105	priya@yahoo.com	yahoo.com*/
