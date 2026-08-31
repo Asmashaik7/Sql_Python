@@ -187,4 +187,77 @@ CustomerID	Email	EmailProvider
 102	rahul@yahoo.com	yahoo.com
 103	sara@outlook.com	outlook.com
 104	imran@gmail.com	gmail.com
-105	priya@yahoo.com	yahoo.com*/
+105	priya@yahoo.com	yahoo.com
+=====================================================================
+Next String Challenge — Business Scenario
+
+Now let's make it more realistic.
+
+The marketing team wants to analyze customers by email provider.
+
+gmail
+yahoo
+outlook*/
+--REPLACE(EmailProvider, '.com', '')
+
+select CustomerID,
+Email,
+replace(substring(Email,charindex('@',Email)+1,len(Email)),'.com','') as EmailProvider
+from CustomerEmails;
+/*
+CustomerID	Email	    EmailProvider
+101	    ayesha@gmail.com	gmail
+102	    rahul@yahoo.com	    yahoo
+103	    sara@outlook.com	outlook
+104	    imran@gmail.com	    gmail
+105	    priya@yahoo.com	    yahoo
+
+=============================================================
+Next Challenge — Customer Name Cleaning
+
+Now let's go back to the CustomerDetails table:
+CleanName
+Remove leading/trailing spaces.
+Convert the name to lowercase.
+Then convert the first letter of each word to uppercase
+*/
+
+select CustomerName from CustomerDetails;
+
+select trim(lower(CustomerName)),Upper(left(trim(CustomerName),1)) from CustomerDetails;
+
+/*We need to find the position of the space:
+
+a y e s h a _ s h a i k
+1 2 3 4 5 6 7 8...
+            ↑
+          space
+
+CHARINDEX() finds the position of a character/text.
+
+Syntax
+CHARINDEX('what_to_find', column_name)
+
+So:
+
+CHARINDEX(' ', CustomerName)*/
+
+select trim(lower(CustomerName)),Upper(left(trim(CustomerName),1)) from CustomerDetails;
+
+/*SUBSTRING(column_name, start_position, number_of_characters)
+here my interntion is to find the space and add a number to it then, capitalize it.
+*/
+select 
+SUBSTRING(
+    TRIM(LOWER(CustomerName)),
+    CHARINDEX(' ', TRIM(LOWER(CustomerName))) + 1,
+    LEN(TRIM(LOWER(CustomerName))) - CHARINDEX(' ', TRIM(LOWER(CustomerName)))
+) from CustomerDetails;
+/*
+
+(No column name)
+shaik
+kumar
+ali
+khan
+reddy*/
