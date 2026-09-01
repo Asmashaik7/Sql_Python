@@ -261,3 +261,53 @@ kumar
 ali
 khan
 reddy*/
+
+select
+SUBSTRING(
+    cleaned_name,
+    CHARINDEX(' ', cleaned_name) + 1,
+    LEN(cleaned_name) - CHARINDEX(' ', cleaned_name))
+
+SELECT
+    CustomerID,
+    UPPER(LEFT(TRIM(CustomerName), 1))
+    + LOWER(SUBSTRING(
+        TRIM(CustomerName),
+        2,
+        CHARINDEX(' ', TRIM(CustomerName)) - 1
+    ))
+    + ' '
+    + UPPER(SUBSTRING(
+        TRIM(CustomerName),
+        CHARINDEX(' ', TRIM(CustomerName)) + 1,
+        1
+    ))
+    + LOWER(SUBSTRING(
+        TRIM(CustomerName),
+        CHARINDEX(' ', TRIM(CustomerName)) + 2,
+        LEN(TRIM(CustomerName))
+    )) AS CleanName
+FROM CustomerDetails;
+
+/*TRIM(column_name)
+LOWER(column_name)
+UPPER(column_name)
+
+LEN(column_name)
+
+LEFT(column_name, number_of_characters)
+
+RIGHT(column_name, number_of_characters)
+
+SUBSTRING(column_name, start_position, number_of_characters)
+
+CHARINDEX('text_to_find', column_name)
+
+REPLACE(column_name, 'old_text', 'new_text')
+
+expression1 + expression2
+
+For example:
+
+first_name + ' ' + last_name
+*/
