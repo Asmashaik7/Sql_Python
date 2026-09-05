@@ -162,7 +162,7 @@ This tells SQL Server where @ is located.
 
 And you know:
 
-SUBSTRING(text, start_position, length
+SUBSTRING(text, start_position, length)
 */
 
 select CustomerID,
@@ -176,6 +176,18 @@ CustomerID	Email	EmailProvider
 103	sara@outlook.com	@outlook.com
 104	imran@gmail.com	@gmail.com
 105	priya@yahoo.com	@yahoo.com*/
+
+select CustomerID,
+Email,
+substring(Email,charindex('@',Email)+1,len(Email)) as EmailProvider
+from CustomerEmails;
+/*
+CustomerID	Email	EmailProvider
+101	ayesha@gmail.com	gmail.com
+102	rahul@yahoo.com	yahoo.com
+103	sara@outlook.com	outlook.com
+104	imran@gmail.com	gmail.com
+105	priya@yahoo.com	yahoo.com*/
 
 select CustomerID,
 Email,
@@ -204,6 +216,7 @@ select CustomerID,
 Email,
 replace(substring(Email,charindex('@',Email)+1,len(Email)),'.com','') as EmailProvider
 from CustomerEmails;
+
 /*
 CustomerID	Email	    EmailProvider
 101	    ayesha@gmail.com	gmail
@@ -242,31 +255,36 @@ So:
 
 CHARINDEX(' ', CustomerName)*/
 
-select trim(lower(CustomerName)),Upper(left(trim(CustomerName),1)) from CustomerDetails;
+select trim(lower(CustomerName)) as name1,
+Upper(left(trim(CustomerName),1)) as First_Char,
+charindex(' ',CustomerName) as char_index
+from CustomerDetails;
 
 /*SUBSTRING(column_name, start_position, number_of_characters)
 here my interntion is to find the space and add a number to it then, capitalize it.
 */
 select 
 SUBSTRING(
-    TRIM(LOWER(CustomerName)),
-    CHARINDEX(' ', TRIM(LOWER(CustomerName))) + 1,
+    TRIM(LOWER(CustomerName)),--clean name
+    CHARINDEX(' ', TRIM(LOWER(CustomerName))) + 1, 
     LEN(TRIM(LOWER(CustomerName))) - CHARINDEX(' ', TRIM(LOWER(CustomerName)))
-) from CustomerDetails;
+) as secondname from CustomerDetails;
+
 /*
 
-(No column name)
+secondname
 shaik
 kumar
 ali
 khan
 reddy*/
 
+/*SYNTAX
 select
 SUBSTRING(
     cleaned_name,
     CHARINDEX(' ', cleaned_name) + 1,
-    LEN(cleaned_name) - CHARINDEX(' ', cleaned_name))
+    LEN(cleaned_name) - CHARINDEX(' ', cleaned_name))*/
 
 SELECT
     CustomerID,
