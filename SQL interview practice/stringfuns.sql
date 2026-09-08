@@ -306,8 +306,15 @@ SELECT
         LEN(TRIM(CustomerName))
     )) AS CleanName
 FROM CustomerDetails;
-
-/*TRIM(column_name)
+/*
+CustomerID	CleanName
+101	Ayesha  Shaik
+102	Rahul  Kumar
+103	Sara  Ali
+104	Imran  Khan
+105	Priya  Reddy
+===================================================
+TRIM(column_name)
 LOWER(column_name)
 UPPER(column_name)
 
@@ -328,4 +335,18 @@ expression1 + expression2
 For example:
 
 first_name + ' ' + last_name
-*/
+
+
+LEN(column_name)
+
+LEFT(column_name, number_of_characters)
+
+RIGHT(column_name, number_of_characters)
+
+SUBSTRING(column_name, start_position, number_of_characters)
+
+CHARINDEX('text_to_find', column_name)
+
+REPLACE(column_name, 'old_text', 'new_text')*/
+
+
