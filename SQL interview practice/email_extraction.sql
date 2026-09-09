@@ -71,3 +71,5 @@ AFTER @
 SUBSTRING(..., CHARINDEX('@', Email)+1, ...)
 */
 
+
+
