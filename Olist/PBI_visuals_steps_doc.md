@@ -28,6 +28,7 @@ Order 1     C001            U100
 Order 2     C002            U100
 Order 3     C003            U200
 =====================================================
+I want to find the order status %
 Order Status % =
 DIVIDE(
     COUNT(olist_orders_dataset[order_id]),
@@ -133,3 +134,75 @@ because we need to say:
 "Calculate total orders, but ignore the current order-status filter."
 
 That's the exact idea behind the percentage measure we're building.
+======
+Out of 99k orders, 625 oders are cancelled. 
+I wanna find out the revenue appro of these orders
+
+So we can't simply say, for example, “300 were canceled because customers changed their minds.”
+
+But we can investigate clues around those 625 canceled orders. 625 out of 99,441 orders is approximately 0.63% canceled.
+So cancellation is relatively small in the overall order population, but the interesting question is whether those cancellations are concentrated in particular categories, sellers, payment methods, or time periods.
+Let's calculate the actual number in Power BI
+
+Since we're doing this step-by-step, don't create a visual yet.
+
+Create this measure:
+
+Canceled Revenue =
+CALCULATE(
+    SUM(olist_order_payments_dataset[payment_value]),
+    olist_orders_dataset[order_status] = "canceled"
+)
+--143.26k
+This asks:
+
+Sum the payment value, but only for orders whose status is canceled.
+
+Then we'll create the average canceled order value separately.
+----
+Average Canceled Order Value =
+DIVIDE(
+    [Canceled Revenue],
+    CALCULATE(
+        DISTINCTCOUNT(olist_order_payments_dataset[order_id]),
+        olist_orders_dataset[order_status] = "canceled"
+    )
+)
+Your Average Canceled Order Value = R$229.21.
+
+Now compare that with the overall revenue:
+
+Total revenue: R$16.01M
+Canceled-order payment value: R$143.26K
+Canceled orders: 625
+Total orders: 99,441
+
+So canceled orders represent about 0.89% of total payment value, while they represent about 0.63% of orders.
+
+That difference is interesting: canceled orders have a somewhat higher average payment value than the overall order population.
+
+Average Canceled Order Value =
+DIVIDE(
+    [Canceled Revenue],
+    CALCULATE(
+        DISTINCTCOUNT(olist_order_payments_dataset[order_id]),
+        olist_orders_dataset[order_status] = "canceled"
+    )
+)
+
+-------------
+Average Order Value =
+DIVIDE(
+    SUM(olist_order_payments_dataset[payment_value]),
+    DISTINCTCOUNT(olist_order_payments_dataset[order_id])
+)
+Canceled orders have an average value of R$229.21 vs R$160.99 overall.
+
+That's about 42% higher.
+
+So although only 625 orders were canceled, the canceled orders are higher-value on average than the typical order.
+
+
+
+
+
