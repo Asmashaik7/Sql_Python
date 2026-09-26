@@ -201,6 +201,66 @@ Canceled orders have an average value of R$229.21 vs R$160.99 overall.
 That's about 42% higher.
 
 So although only 625 orders were canceled, the canceled orders are higher-value on average than the typical order.
+===========================================
+Delivered Orders % =
+DIVIDE(
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        olist_orders_dataset[order_status] = "delivered"
+    ),
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        ALL(olist_orders_dataset[order_status])
+    )
+)
+What we're asking DAX
+
+Numerator:
+
+Count only delivered orders.
+
+Denominator:
+
+Count all orders, ignoring the order-status filter.
+
+So:
+
+96,478 ÷ 99,441 = 97.02%
+This returns:
+
+0.9702
+
+Then in Measure tools → Format → Percentage, Power BI displays it as:
+
+97.02%
+
+So:
+
+DAX calculates the decimal → Power BI Percentage format displays it as %
+===========================
+What is Order Status %?
+
+It answers:
+
+Out of all orders, what percentage is in each status?
+
+For example, your Olist data has:
+
+Delivered → 97.02%
+Shipped → about 1.11%
+Canceled → about 0.63%
+Unavailable → about 0.61%
+
+
+Order Status % =
+DIVIDE(
+    COUNT(olist_orders_dataset[order_id]),
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        ALL(olist_orders_dataset[order_status])
+    )
+)
+
 
 
 
