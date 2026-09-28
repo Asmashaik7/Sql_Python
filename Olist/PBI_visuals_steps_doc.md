@@ -261,6 +261,37 @@ DIVIDE(
     )
 )
 
+Metric	                        Value	    Meaning
+Average Canceled Order Value	229.21	    Average payment value associated with canceled orders
+Average Order Value	            160.99	    Average payment value across all orders
+========================================================
+Next step: Cancellation Rate
+
+Before we create it, let's be clear about the business question:
+
+"What percentage of all orders were canceled?"
+
+We know:
+
+Canceled orders = 625
+Total orders = 99,441
+
+So expected result is approximately:
+
+0.63%
+
+Create this measure
+Cancellation Rate =
+DIVIDE(
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        olist_orders_dataset[order_status] = "canceled"
+    ),
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        ALL(olist_orders_dataset[order_status])
+    )
+)
 
 
 
