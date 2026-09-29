@@ -292,6 +292,28 @@ DIVIDE(
         ALL(olist_orders_dataset[order_status])
     )
 )
+==============================
+In Power BI → New measure:
+
+Cancelled Orders =
+CALCULATE(
+    [Total orders],
+    olist_orders_dataset[order_status] = "canceled"
+)
+Why I'm using [Total orders]
+
+You already have Total orders in your field list, so we're reusing your existing measure rather than creating another COUNT() unnecessarily.
+
+This measure means:
+
+Take the total number of orders, but only where order_status = "canceled".
+
+Cancelled Orders =
+CALCULATE(
+    [Total orders],
+    olist_orders_dataset[order_status] = "canceled"
+)
+
 
 
 
