@@ -314,7 +314,12 @@ CALCULATE(
     olist_orders_dataset[order_status] = "canceled"
 )
 
+=====================================
+Next visual: Cancellation Trend by Month
 
+Business question:
+
+“Are cancellations happening consistently, or were there particular months where cancellations increased?”
 
 
 
