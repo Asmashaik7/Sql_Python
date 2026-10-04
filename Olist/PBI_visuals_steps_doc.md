@@ -322,5 +322,46 @@ Business question:
 “Are cancellations happening consistently, or were there particular months where cancellations increased?”
 
 
+Next: Monthly Cancellation Rate
+
+This is the better analysis because count alone can mislead us.
+
+For example, August 2018 had 84 cancellations. But if August had a very large number of total orders, 84 might not be unusual.
+
+So our question is:
+
+“What percentage of that month's orders were cancelled?”
+
+We'll create that measure and put it on a new line chart.
+
+Let's do only the DAX measure first:
+
+Monthly Cancellation Rate =
+DIVIDE(
+    CALCULATE(
+        COUNT(olist_orders_dataset[order_id]),
+        olist_orders_dataset[order_status] = "canceled"
+    ),
+    COUNT(olist_orders_dataset[order_id])
+)
+
+The real insight
+
+August 2018: 84 cancellations, but only 1.29% cancellation rate → lots of orders that month, so the 84 cancellations are largely explained by high order volume.
+
+September 2018: 5 cancellations, but 93.75% rate → only a tiny number of orders existed in that month.
+
+October 2018: 4 cancellations, 100% rate → again, extremely small order volume.
+
+So Sep–Oct 2018 should NOT be presented as a major cancellation problem. It's an incomplete/low-volume tail of the dataset.
+
+What I would put in our project insight
+
+Cancellation rate remained below ~1.3% during the meaningful high-volume period, while the extreme rates in Sep–Oct 2018 are driven by very low order volume and incomplete data.
+
+That's a much stronger analyst conclusion than simply saying "cancellations reached 100%."
+
+And notice something else: Feb 2018 = 1.09% and Aug 2018 = 1.29%. Those are the months worth investigating further because they combine high cancellation counts with a meaningful rate.
+
 
 
