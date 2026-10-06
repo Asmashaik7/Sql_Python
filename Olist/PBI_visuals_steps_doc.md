@@ -362,6 +362,22 @@ Cancellation rate remained below ~1.3% during the meaningful high-volume period,
 That's a much stronger analyst conclusion than simply saying "cancellations reached 100%."
 
 And notice something else: Feb 2018 = 1.09% and Aug 2018 = 1.29%. Those are the months worth investigating further because they combine high cancellation counts with a meaningful rate.
+==================================================================
+What we've actually learned
+
+This cancellation work gave you some genuinely useful analyst skills:
+
+Count vs rate
+Numerator vs denominator
+Filter context
+Why date context can come from the visual
+Why count alone can mislead
+Why percentage alone can mislead when the denominator is tiny
+Identifying incomplete data periods
+Avoiding unsupported business conclusions
+
+Those are interview-level analytical skills, not wasted time.
+===========================================
 
 
 
