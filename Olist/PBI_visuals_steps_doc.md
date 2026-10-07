@@ -378,6 +378,92 @@ Avoiding unsupported business conclusions
 
 Those are interview-level analytical skills, not wasted time.
 ===========================================
+Why are the two totals different?
+===========================================
+Why are the two totals different?
+
+1. Total Payment Value = 16,008,872.12 BRL
+
+From:
+
+SUM(payment_value)
+
+This is from the payments table, so it represents the transaction/payment side of the business.
+
+2. Category Revenue total = 15,843,553.24 BRL
+
+From:
+
+SUM(price + freight_value)
+
+This is from the order_items table, so it represents the value of products + freight attached to order items.
+
+Your SQL explicitly investigated this difference.
+
+The key reason
+
+There is a data-quality mismatch between the two tables:
+
+Payments: 99,440 distinct orders
+Items: 98,666 distinct orders
+775 orders have payment records but no corresponding items
+1 order has items but no payment record
+
+So there are payment transactions that cannot be matched to product/item records.
+
+That's why:
+
+Payment total > Item-level total
+
+16,008,872.12 − 15,843,553.24 = 165,318.88 BRL
+
+And your SQL correctly chose payment_value as the source of truth for overall revenue because it represents the actual transaction inflow.
+
+And this is important for our Power BI project
+
+Your current Top 10 Product Categories by Revenue is actually correct according to your SQL Q4/Q13:
+
+SUM(price + freight_value)
+
+So DO NOT change its name to Payment Value.
+
+We should keep:
+
+Top 10 Product Categories by Revenue
+
+because that is exactly how your SQL analysis defined category revenue.
+
+And keep:
+
+Total Payment Value
+
+for the 16.01M KPI.
+
+The two numbers being different is not a mistake in Power BI — it's an actual data-quality finding from your SQL project. 👍
+
+============================================
+Customer & Geographic Insights
+
+1. Customer distribution by state
+
+Business question:
+
+“Where are Olist's customers concentrated geographically?”
+This comes directly from your SQL analysis:
+
+São Paulo has 42% of the customer base, making geography a meaningful business finding.
+
+Business question:
+
+Where is Olist's customer base concentrated?
+
+Visual
+I recommend a horizontal bar chart, not a map.
+
+Y-axis: customer_state
+X-axis: Count of customers
+Sort → Descending
+Title → Customers by State
 
 
 
