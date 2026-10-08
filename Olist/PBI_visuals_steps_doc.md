@@ -465,5 +465,27 @@ X-axis: Count of customers
 Sort → Descending
 Title → Customers by State
 
+==================================
+Customer Order Count =
+CALCULATE(
+    COUNTROWS(olist_customers_dataset),
+    ALLEXCEPT(
+        olist_customers_dataset,
+        olist_customers_dataset[customer_unique_id]
+    )
+)
+
+Read it like English:
+For each customer_unique_id, count how many rows belong to that customer, while keeping the customer_unique_id filter.
+
+Step 1 — Check the new column
+Add Customer Order Count to the table visual you already have.
+So your table should now show:
+- customer_unique_id
+- Orders per Customer (measure)
+- Customer Order Count (calculated column)
+Sort by Customer Order Count → Descending.
+===============
+
 
 
