@@ -486,6 +486,48 @@ So your table should now show:
 - Customer Order Count (calculated column)
 Sort by Customer Order Count → Descending.
 ===============
+Your Power BI result is:
+
+One-time: 93,099
+Repeat: 2,997
+Total: 96,096
+
+And 2,997 is internally consistent with the actual customer_unique_id grouping. The problem is that our SQL README says 3,345 repeat customers.
+
+So we have a definition/query mismatch in our project, not a Power BI error.
+
+What I want you to notice
+
+You correctly built the logic:
+
+customer_unique_id → count orders → >1 = Repeat
+
+That gives 2,997 in Power BI.
+
+So we should NOT force Power BI to become 3,345 just because the README says 3,345.
+
+Since our SQL file is our source of truth, the next thing we should do is go back to the actual SQL query that produced 3,345 and compare its logic with what we're doing in Power BI.
+
+That is exactly what a real analyst does when two reports disagree:
+
+Don't adjust the dashboard to match the expected number. Investigate the discrepancy.
+
+Next visual: One-time vs Repeat Customers on your Customer & Geographic Insights page.
+
+Add a bar chart.
+
+Y-axis: Customer Type
+
+X-axis: customer_unique_id → Distinct count
+=======================================================
+Next visual: Delayed Orders by State.
+
+
+========================================================
+Next visual: Payment Method Analysis
+Business requirement: Which payment methods do Olist customers use most frequently?
+
+
 
 
 

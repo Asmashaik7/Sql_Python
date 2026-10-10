@@ -684,3 +684,23 @@ FROM running_total;
 -- dataset ends around August 2018. This finding is consistent across 
 -- Q10 (16 orders), Q12 (-6,496 drop) and Q14 (166.46 BRL) —  triangulating that Sep/Oct 2018 data is incomplete.
 
+--=======================================================================
+--As part of the extension of the O'List SQl project to Power BI, 
+--Im rechecking the results with Power BI dashboard - Today's Date:10-10-2026
+--=========================================================================
+Use OlistEcommerce;
+
+SELECT COUNT(*) AS repeat_customers
+FROM (
+    SELECT c.customer_unique_id
+    FROM olist_customers_dataset c
+    JOIN olist_orders_dataset o
+        ON c.customer_id = o.customer_id
+    GROUP BY c.customer_unique_id
+    HAVING COUNT(DISTINCT o.order_id) > 1
+) AS repeat_buyers;
+
+/*Result:
+repeat_customers
+2997*/
+
