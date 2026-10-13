@@ -522,12 +522,40 @@ X-axis: customer_unique_id → Distinct count
 =======================================================
 Next visual: Delayed Orders by State.
 
+=============================================
+In Power BI, go to Modeling → New measure and paste:
+
+Total Delayed Orders =
+CALCULATE(
+    DISTINCTCOUNT(olist_orders_dataset[order_id]),
+    olist_orders_dataset[order_status] = "delivered",
+    olist_orders_dataset[Delivery Days] > 50
+)
+
+The card correctly shows 632 Total Delayed Orders, and RJ leads with 214 orders.
+===================================
+Average Delivery Days-measure
+Average Delivery Days =
+CALCULATE(
+    AVERAGE(olist_orders_dataset[Delivery Days]),
+    olist_orders_dataset[order_status] = "delivered"
+)
+
 
 ========================================================
 Next visual: Payment Method Analysis
 Business requirement: Which payment methods do Olist customers use most frequently?
+Step 1: Create the visual
 
+Add a horizontal bar chart on your report.
 
+Y-axis: payment_type from olist_order_payments_dataset
+
+X-axis: order_id from olist_order_payments_dataset → select Distinct count
+
+Distinct count is important because an order can have multiple payment records.
+
+=================================================================
 
 
 
