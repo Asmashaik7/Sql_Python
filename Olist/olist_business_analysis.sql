@@ -17,7 +17,11 @@ FROM olist_customers_dataset;
 
 -- Result: 96,096 unique customers
 -- Insight: Customers table has 99,441 rows but only 96,096 unique customers
--- meaning ~3,345 customers placed repeat orders on Olist!
+-- Note: 99,441 customer records represent 96,096 unique customers.
+-- The difference of 3,345 represents duplicate customer records,
+-- not necessarily 3,345 repeat customers.
+-- Repeat customers must be identified by counting orders per
+-- customer_unique_id.
 
 -- =======================================================
 -- Q2: What is the distribution of orders by order status?

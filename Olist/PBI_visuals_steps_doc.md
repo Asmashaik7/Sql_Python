@@ -557,5 +557,16 @@ Distinct count is important because an order can have multiple payment records.
 
 =================================================================
 
+R$16,008,872.12 comes from olist_order_payments_dataset, by summing payment_value.
+R$15,843,553.24 comes from olist_order_items_dataset, by summing price + freight_value
 
+
+16,008,872.12-15,843,553.24 =$165,318.88
+
+During cross-table reconciliation, I identified a discrepancy of R$165,318.88 between the total payment value and the total of product prices plus freight. I also found 775 orders present in the payment table but missing from the order-items table. These missing orders may contribute to the difference, but further investigation is required to determine the exact cause and reconcile the remaining amount.
+
+Remember this distinction
+- What you know: The totals differ by R$165,318.88.
+- What you found: 775 orders exist in the payment table but not in the order-items table.
+- What you don't yet know: Whether those 775 orders explain the entire difference.
 
