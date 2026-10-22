@@ -653,7 +653,6 @@ FROM category_revenue_ranking;
 /*Q14: Running Total of Revenue
 Business Question:
 "What is the cumulative revenue month by month?"*/
--- ================================================
 
 WITH running_total AS
 (
@@ -680,31 +679,74 @@ FROM running_total;
 -- Peak month:   Nov 2017 | 1,179,143.77 BRL | Running:  6,336,308.41 BRL
 -- Final month:  Sep 2018 |       166.46 BRL | Running: 15,843,553.24 BRL
 
--- Insight: Using CTE and SUM() OVER(), monthly running total revenue was calculated. Olist accumulated a total of 15,843,553.24 BRL by mid-2018.
--- Revenue crossed the 5 million BRL milestone in October 2017. Monthly revenue grew significantly from 354.75 BRL in Sep 2016 to over 1,000,000 
--- BRL per month in 2018, showing strong business growth.
+-- Insight: Using a CTE and SUM() OVER(), monthly running revenue was calculated.
+-- Revenue crossed the 5 million BRL milestone in October 2017.
+-- November 2017 was the peak month in the results, with revenue of 1,179,143.77 BRL.
 
--- Data Quality Note: Sep 2018 shows only 166.46 BRL in monthly revenue compared to 1,000,000+ BRL in previous months, confirming that the 
--- dataset ends around August 2018. This finding is consistent across 
--- Q10 (16 orders), Q12 (-6,496 drop) and Q14 (166.46 BRL) —  triangulating that Sep/Oct 2018 data is incomplete.
-
+-- Data Quality Note: 
+-- September 2018 shows only 166.46 BRL in monthly revenue, substantially lower than previous months. Our investigation
+-- also found unusually low order counts in September and October 2018.
+-- These months should be interpreted cautiously. The available evidence indicates incomplete or anomalous monthly data, but does not establish
+-- the exact cause.
 --=======================================================================
 --As part of the extension of the O'List SQl project to Power BI, 
 --Im rechecking the results with Power BI dashboard - Today's Date:10-10-2026
 --=========================================================================
 Use OlistEcommerce;
 
+/*Q15: Repeat vs One-Time Buyers
+
+Business Question:
+"How many customers made repeat purchases, and how many
+customers placed only one order?"
+
+Business Logic:
+
+Use customer_unique_id to identify individual customers.
+
+Count distinct order_id for each customer.
+
+Customers with more than one order are repeat customers.
+
+Customers with exactly one order are one-time customers.
+*/
+
+-- Repeat Customers
 SELECT COUNT(*) AS repeat_customers
 FROM (
-    SELECT c.customer_unique_id
-    FROM olist_customers_dataset c
-    JOIN olist_orders_dataset o
-        ON c.customer_id = o.customer_id
-    GROUP BY c.customer_unique_id
-    HAVING COUNT(DISTINCT o.order_id) > 1
+SELECT c.customer_unique_id
+FROM olist_customers_dataset c
+JOIN olist_orders_dataset o
+ON c.customer_id = o.customer_id
+GROUP BY c.customer_unique_id
+HAVING COUNT(DISTINCT o.order_id) > 1
 ) AS repeat_buyers;
 
 /*Result:
 repeat_customers
 2997*/
 
+-- One-Time Customers
+SELECT COUNT(*) AS one_time_customers
+FROM (
+SELECT c.customer_unique_id
+FROM olist_customers_dataset c
+JOIN olist_orders_dataset o
+ON c.customer_id = o.customer_id
+GROUP BY c.customer_unique_id
+HAVING COUNT(DISTINCT o.order_id) = 1
+) AS one_time_buyers;
+
+/*Result:
+one-time customers
+93,099*/ 
+
+-- Key Findings:
+-- Total unique customers: 96,096
+-- Repeat customers: 2,997 (3.1%)
+-- One-time customers: 93,099 (96.9%)
+
+-- Business Insight:
+-- Most customers placed only one order. Olist could explore
+-- targeted offers, loyalty programs, and retention campaigns
+-- to encourage customers to make repeat purchases.
