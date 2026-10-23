@@ -18,10 +18,8 @@ FROM olist_customers_dataset;
 -- Result: 96,096 unique customers
 -- Insight: Customers table has 99,441 rows but only 96,096 unique customers
 -- Note: 99,441 customer records represent 96,096 unique customers.
--- The difference of 3,345 represents duplicate customer records,
--- not necessarily 3,345 repeat customers.
--- Repeat customers must be identified by counting orders per
--- customer_unique_id.
+-- The difference of 3,345 represents duplicate customer records, not necessarily 3,345 repeat customers.
+-- Repeat customers must be identified by counting orders per customer_unique_id.
 
 -- =======================================================
 -- Q2: What is the distribution of orders by order status?
@@ -49,23 +47,22 @@ ORDER BY total_orders DESC;
 
 
 -- ========================================================
--- Q3: What is the total revenue generated on the platform?
+-- Q3: What is the total payment value recorded on the platform?
 -- ========================================================
 SELECT 
     ROUND(SUM(payment_value), 2) AS total_revenue
 FROM olist_order_payments_dataset;
 
 -- Result: 16,008,872.12 BRL
--- Insight: Olist generated approximately 16 million BRL in total revenue 
--- from all payment transactions between 2016-2018
+-- Insight: The total payment value recorded in the Olist payments table was approximately 16.01 million BRL across
+-- the dataset's 2016–2018 period.
 
 
 -- ================================================
 -- DATA QUALITY ANALYSIS & RECONCILIATION
 -- ================================================
--- Purpose: Validate revenue consistency across multiple tables
--- and identify structural data inconsistencies
--- ================================================
+-- Purpose: Validate revenue consistency across multiple tables and identify structural data inconsistencies
+--  ================================================
 
 -- Cross-validation: Total revenue from order items table
 SELECT 
@@ -82,7 +79,10 @@ SELECT COUNT(DISTINCT order_id) AS orders_in_items
 FROM olist_order_items_dataset;
 --Result: 98666 orders
 
---Both difference is 774
+-- Net difference in distinct order counts: 99,440 − 98,666 = 774
+-- Payments table has 774 more distinct orders than the items table.
+-- This net difference reflects 775 payment-only orders minus
+-- 1 item-only order.
 -------------------------------
 -- Find orders with payments but NO items (data quality issue)
 SELECT COUNT(DISTINCT p.order_id) AS orphaned_payment_orders
@@ -106,12 +106,11 @@ FROM olist_orders_dataset
 WHERE order_id = 'bfbd0f9bdef84302105ad712db648a6c';
 -- Result: delivered
 
--- Insight: Discovered 775 orders (~0.8%) with payment records but no 
--- associated items, and 1 order (<0.001%) with items but no payment record.
--- This suggests potential data pipeline issues during order processing.
--- For revenue analysis, payment_value is used as the source of truth 
--- since it reflects actual transaction inflow.
-
+-- Insight: 
+-- Discovered 775 orders (~0.8%) with payment records but no associated items, and 1 order (<0.001%) with items but no payment record.
+-- For the platform payment-value metric, the payments table is used because it directly records payment_value. 
+-- Product prices plus freight are analyzed separately using the order-items table.
+-- The two totals are not assumed to be interchangeable.
 -- =============================================================
 -- Q4: Which product categories have generated the most revenue?
 -- ==============================================================
@@ -157,9 +156,9 @@ ORDER BY Unique_customers DESC;
 -- ES (Espírito Santo)    1,964
 -- GO (Goiás)             1,952
 
--- Insight: São Paulo dominates with 40,302 customers (~42% of total customer base),
--- more than 3x the second-place Rio de Janeiro. The top 3 states (SP, RJ, MG) 
--- account for approximately 66% of all customers, showing heavy geographic 
+-- Insight:
+-- São Paulo dominates with 40,302 customers (~42% of total customer base),more than 3x the second-place Rio de Janeiro.
+-- The top 3 states (SP, RJ, MG) account for approximately 66% of all customers, showing heavy geographic 
 -- concentration in Brazil's southeast region.
 
 -- ==================================================
