@@ -274,12 +274,10 @@ order by total_orders DESC;
 -- debit_card:      217,990 BRL  |   1,528 orders  |  142.57 BRL avg
 -- not_defined:           0 BRL  |       3 orders  |    0.00 BRL avg
 
--- Insight: Credit cards dominate Olist with 75% of all transactions and 78% 
--- of total revenue. Boleto remains significant (19% of orders) serving customers 
--- without credit cards. Vouchers show the lowest average transaction value (66 BRL),
--- indicating usage for small purchases or promotional discounts. Debit card usage 
--- is surprisingly low (1.5%), likely due to Brazilian preference for credit card 
--- installment payment options.
+-- Insight: Credit cards dominate Olist with 75% of all transactions and 78% of total revenue. 
+-- Boleto remains significant (19% of orders) serving customers without credit cards. 
+-- Vouchers show the lowest average transaction value (66 BRL),indicating usage for small purchases or promotional discounts. 
+-- Debit card usage is surprisingly low (1.5%), likely due to Brazilian preference for credit card installment payment options.
 
 
 -- ================================================
@@ -292,40 +290,55 @@ Marketing can target different customer segments
 Shipping teams can prioritize high-value orders
 Fraud detection focuses on high-value anomalies*/
 
-use OlistEcommerce;
+USE OlistEcommerce;
 
-select
-    case
-        when payment_value<100 then 'Low value'
-        when payment_value between 100 and 500 then 'Medium value'
-        else 'High value'
-    end as order_value_segment,
-    count(distinct order_id) as total_orders,
-    round(sum(payment_value),2) as total_revenue,
-    round(avg(payment_value),2) as avg_order_value
-from olist_order_payments_dataset
-group by 
-    case
-        when payment_value<100 then 'Low value'
-        when payment_value between 100 and 500 then 'Medium value'
-        else 'High value'
-    end
-order by total_orders desc;
+WITH OrderPayments AS
+(
+    SELECT
+        order_id,
+        SUM(payment_value) AS total_order_payment
+    FROM olist_order_payments_dataset
+    GROUP BY order_id
+),
+OrderSegments AS
+(
+    SELECT
+        order_id,
+        total_order_payment,
+        CASE
+            WHEN total_order_payment < 100 THEN 'Low Value'
+            WHEN total_order_payment <= 500 THEN 'Medium Value'
+            ELSE 'High Value'
+        END AS order_value_segment
+    FROM OrderPayments
+)
+SELECT
+    order_value_segment,
+    COUNT(*) AS total_orders,
+    ROUND(SUM(total_order_payment), 2) AS total_payment_value,
+    ROUND(AVG(total_order_payment), 2) AS avg_order_value
+FROM OrderSegments
+GROUP BY order_value_segment
+ORDER BY
+    CASE order_value_segment
+        WHEN 'Low Value' THEN 1
+        WHEN 'Medium Value' THEN 2
+        WHEN 'High Value' THEN 3
+    END;
+/*
+order_value_segment 	total_orders	total_payment_value	avg_order_value
+Low Value	             47255	            2847137.02	    60.25
+Medium Value	        47889	            9166716.44	    191.42
+High Value	            4296	            3995018.66	    929.94
+*/
 
--- Result:
--- Low Value:     48,493 orders | 2,941,315 BRL |  56.72 BRL avg
--- Medium Value:  47,539 orders | 9,125,335 BRL | 191.01 BRL avg
--- High Value:     4,239 orders | 3,942,223 BRL | 926.27 BRL avg
+--Insights:
 
--- Insight: Customer value distribution follows the Pareto principle — just 4% 
--- of customers (high-value segment) contribute 25% of total revenue with an 
--- average order value of 926 BRL. The mid-value segment drives the bulk of 
--- revenue at 57% despite representing 47% of orders. This suggests opportunity 
--- for (1) VIP programs targeting high-value customers, (2) upselling strategies 
--- to move low-value customers to mid-value tier, and (3) retention campaigns 
--- focused on the profitable mid-value segment.
-
-
+--Medium-value orders contributed the highest total payment value of R$9.17 million, accounting for the largest share of orders (47,889).
+--Low-value orders accounted for 47,255 orders but contributed only R$2.85 million in payment value, with an average order value of R$60.25.
+--High-value orders represented just 4,296 orders, but contributed approximately R$4.00 million in payment value. Their average order value was R$929.94, significantly higher than the other segments.
+--Overall, medium-value orders were the largest contributor to total payment value, while high-value orders generated substantial value despite representing a much smaller number of orders.
+--=========================================
 /*## SQL Order of Execution
 1. FROM
 2. WHERE
@@ -334,7 +347,8 @@ order by total_orders desc;
 5. ORDER BY (CAN use SELECT aliases!)
 
 That's why we repeat CASE in GROUP BY but can use alias in ORDER BY!
-case stat creates derived columns, It is created temporarily when the query runs.Exists only in that query output, Disappears after execution, unlike calculated column which exists in the table(model)*/
+case stat creates derived columns, It is created temporarily when the query runs.Exists only in that query output, 
+Disappears after execution, unlike calculated column which exists in the table(model)*/
 
 -- ===============================================================
 -- Q9: What is the average delivery time for completed orders?
@@ -356,13 +370,11 @@ group by order_status;--inorder to exclude the empty delivery dates.
 -- Fastest: 0 days (same day delivery!)
 -- Slowest: 210 days (7 months!)
 
--- Insight: Olist maintains a reasonable average delivery time of 12 days 
--- for a country as large as Brazil. However, the extreme range (0-210 days) 
--- reveals significant operational variance. Same-day delivery capability exists 
--- for local orders, likely in São Paulo metro area. The 210-day outlier suggests 
--- either remote region deliveries, logistics issues, or data quality problems 
--- worth investigating. This wide variance likely impacts customer satisfaction 
--- scores and could benefit from delivery time prediction models.
+-- Insight: Olist maintains a reasonable average delivery time of 12 days for a country as large as Brazil. 
+-- However, the extreme range (0-210 days) reveals significant operational variance.
+-- Same-day delivery capability exists for local orders, likely in São Paulo metro area. 
+-- The 210-day outlier suggests either remote region deliveries, logistics issues, or data quality problem sworth investigating.
+-- This wide variance likely impacts customer satisfaction scores and could benefit from delivery time prediction models.
 
 -- Find the order that took 210 days
 SELECT 
@@ -381,8 +393,7 @@ WHERE o.order_status = 'delivered'
 -- ================================================
 -- BONUS INVESTIGATION: Delayed Delivery Analysis by State
 -- ================================================
--- Purpose: Investigate orders with delivery times exceeding 50 days
--- to identify geographic patterns and operational bottlenecks
+-- Purpose:Investigate orders with delivery times exceeding 50 days to identify geographic patterns and operational bottlenecks
 
 -- Step 1: Count orders with delivery > 50 days
 SELECT
